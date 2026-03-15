@@ -1,69 +1,235 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-<title>Los Santos Cardedex</title>
-<style>
-body{
-font-family:Arial;
-background:#0d0d0d;
-color:white;
-text-align:center;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Los Santos Cardedex</title>
+  <style>
+    * { box-sizing: border-box; }
 
-h1{
-margin-top:40px;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0b0b0b;
+      color: white;
+    }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,200px);
-gap:20px;
-justify-content:center;
-margin-top:40px;
-}
+    header {
+      padding: 30px 20px 10px;
+      text-align: center;
+    }
 
-.card{
-background:#1a1a1a;
-border-radius:10px;
-padding:10px;
-}
+    h1 {
+      margin: 0 0 20px;
+      font-size: 40px;
+    }
 
-.card img{
-width:100%;
-border-radius:8px;
-}
+    .topbar {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 0 20px 20px;
+    }
 
-.rare{border:2px solid blue;}
-.epic{border:2px solid red;}
-.legendary{border:2px solid orange;}
-</style>
+    input, select {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #333;
+      background: #161616;
+      color: white;
+      min-width: 220px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1400px;
+      margin: auto;
+    }
+
+    .card {
+      background: #151515;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: 0.2s;
+      box-shadow: 0 0 0 1px #222;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      display: block;
+      background: #111;
+    }
+
+    .card-content {
+      padding: 14px;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .rare {
+      border: 2px solid #1d4ed8;
+    }
+    .rare .tag {
+      background: #1d4ed8;
+    }
+
+    .epique {
+      border: 2px solid #dc2626;
+    }
+    .epique .tag {
+      background: #dc2626;
+    }
+
+    .legendaire {
+      border: 2px solid #f59e0b;
+    }
+    .legendaire .tag {
+      background: #f59e0b;
+      color: black;
+    }
+
+    .stats {
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #ddd;
+    }
+
+    .special {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .price {
+      margin-top: 8px;
+      color: #aaa;
+      font-size: 14px;
+    }
+  </style>
 </head>
-
 <body>
+  <header>
+    <h1>Los Santos Cardedex</h1>
+  </header>
 
-<h1>Los Santos Cardedex</h1>
+  <div class="topbar">
+    <input type="text" id="search" placeholder="Rechercher un personnage..." />
+    <select id="filter">
+      <option value="all">Toutes les raretés</option>
+      <option value="rare">Rare</option>
+      <option value="epique">Épique</option>
+      <option value="legendaire">Légendaire</option>
+    </select>
+  </div>
 
-<div class="grid">
+  <div class="grid" id="cardGrid"></div>
 
-<div class="card epic">
-<img src="https://via.placeholder.com/200x300">
-<h3>Renato Nascimento</h3>
-<p>Epic</p>
-</div>
+  <script>
+    const cards = [
+      {
+        name: "Renato Nascimento",
+        image: "images/renato.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3 500 $",
+        intelligence: 95,
+        force: 66,
+        danger: 78,
+        charisme: 92,
+        special: "Plaidoirie Foudroyante"
+      },
+      {
+        name: "Ghost Pookie",
+        image: "images/ghost.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1 500 $",
+        intelligence: 84,
+        force: 75,
+        danger: 86,
+        charisme: 90,
+        special: "Manipulation de Rue"
+      },
+      {
+        name: "Biggy Mackenzy",
+        image: "images/biggy.png",
+        rarity: "legendaire",
+        displayRarity: "Légendaire",
+        price: "5 500 $",
+        intelligence: 82,
+        force: 94,
+        danger: 91,
+        charisme: 88,
+        special: "Roi du Quartier"
+      }
+    ];
 
-<div class="card rare">
-<img src="https://via.placeholder.com/200x300">
-<h3>Ghost Pookie</h3>
-<p>Rare</p>
-</div>
+    const grid = document.getElementById("cardGrid");
+    const search = document.getElementById("search");
+    const filter = document.getElementById("filter");
 
-<div class="card legendary">
-<img src="https://via.placeholder.com/200x300">
-<h3>Biggy Mackenzy</h3>
-<p>Legendary</p>
-</div>
+    function renderCards() {
+      const searchValue = search.value.toLowerCase();
+      const filterValue = filter.value;
 
-</div>
+      const filteredCards = cards.filter(card => {
+        const matchName = card.name.toLowerCase().includes(searchValue);
+        const matchRarity = filterValue === "all" || card.rarity === filterValue;
+        return matchName && matchRarity;
+      });
 
+      grid.innerHTML = "";
+
+      filteredCards.forEach(card => {
+        const div = document.createElement("div");
+        div.className = `card ${card.rarity}`;
+        div.innerHTML = `
+          <img src="${card.image}" alt="${card.name}">
+          <div class="card-content">
+            <div class="tag">${card.displayRarity}</div>
+            <h3>${card.name}</h3>
+            <div class="stats">
+              INT: ${card.intelligence}<br>
+              FOR: ${card.force}<br>
+              DNG: ${card.danger}<br>
+              CHA: ${card.charisme}
+            </div>
+            <div class="special">⭐ ${card.special}</div>
+            <div class="price">💰 ${card.price}</div>
+          </div>
+        `;
+        grid.appendChild(div);
+      });
+    }
+
+    search.addEventListener("input", renderCards);
+    filter.addEventListener("change", renderCards);
+
+    renderCards();
+  </script>
 </body>
 </html>
