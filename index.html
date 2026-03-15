@@ -151,43 +151,864 @@
   <script>
     const cards = [
       {
-        name: "Renato Nascimento",
-        image: "images/renato.png",
-        rarity: "epique",
-        displayRarity: "Épique",
-        price: "3 500 $",
-        intelligence: 95,
-        force: 66,
-        danger: 78,
-        charisme: 92,
-        special: "Plaidoirie Foudroyante"
-      },
-      {
-        name: "Ghost Pookie",
-        image: "images/ghost.png",
-        rarity: "rare",
-        displayRarity: "Rare",
-        price: "1 500 $",
-        intelligence: 84,
-        force: 75,
-        danger: 86,
-        charisme: 90,
-        special: "Manipulation de Rue"
-      },
-      {
-        name: "Aitoarii Teikitohe",
-        image: "cardedex/Aitoarii.png",
-        rarity: "epique",
-        displayRarity: "Épique",
-        price: "3 500 $",
-        intelligence: 80,
-        force: 85,
-        danger: 88,
-        charisme: 84,
-        special: "Roi de la moto"
-      }
-    ];
+name: "Franklin 'FB' Buckley",
+image: "images/franklin_fb_buckley.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 74,
+force: 81,
+danger: 83,
+charisme: 76,
+special: "Malistrip"
+},
 
+{
+name: "Alvaro Cardinas",
+image: "images/alvaro_cardinas.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 69,
+force: 86,
+danger: 80,
+charisme: 65,
+special: "Bagarreur loyal"
+},
+
+{
+name: "Aurmelya Haldorsen",
+image: "images/aurmelya_haldorsen.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 82,
+force: 66,
+danger: 73,
+charisme: 88,
+special: "Addiction aux défis"
+},
+
+{
+name: "Chavo",
+image: "images/chavo.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 86,
+force: 68,
+danger: 79,
+charisme: 71,
+special: "Chimiste hors pair"
+},
+
+{
+name: "Cole McGarrett",
+image: "images/cole_mcgarrett.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 83,
+force: 84,
+danger: 87,
+charisme: 70,
+special: "Traqueur Most Wanted"
+},
+
+{
+name: "DK",
+image: "images/dk.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 75,
+force: 69,
+danger: 72,
+charisme: 81,
+special: "Flash du Hood"
+},
+
+{
+name: "Elliot Wilson",
+image: "images/elliot_wilson.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 80,
+force: 77,
+danger: 82,
+charisme: 68,
+special: "Matricule 48"
+},
+
+{
+name: "Ethan Shaws",
+image: "images/ethan_shaws.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 74,
+force: 72,
+danger: 69,
+charisme: 83,
+special: "Calme stratégique"
+},
+
+{
+name: "Dim Kleein",
+image: "images/dim_kleein.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 77,
+force: 74,
+danger: 76,
+charisme: 79,
+special: "Relation Benny's"
+},
+{
+name: "Kahel Brooks",
+image: "images/kahel_brooks.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 70,
+force: 86,
+danger: 83,
+charisme: 72,
+special: "Mauvais bagarreur"
+},
+
+{
+name: "Logan Hayes",
+image: "images/logan_hayes.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 82,
+force: 74,
+danger: 76,
+charisme: 71,
+special: "Justice froide"
+},
+
+{
+name: "Markus 'Shorty' Kelly",
+image: "images/markus_shorty_kelly.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 73,
+force: 85,
+danger: 88,
+charisme: 69,
+special: "Tentative fatale"
+},
+
+{
+name: "Mascotte",
+image: "images/mascotte.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 64,
+force: 60,
+danger: 58,
+charisme: 90,
+special: "La vachette"
+},
+
+{
+name: "Flako Sinetavarez",
+image: "images/flako_sinetavarez.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 78,
+force: 81,
+danger: 84,
+charisme: 76,
+special: "Vice-président dangereux"
+},
+
+{
+name: "Ghost 'Pookie'",
+image: "images/ghost_pookie.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 84,
+force: 75,
+danger: 86,
+charisme: 90,
+special: "Manipulation de rue"
+},
+
+{
+name: "Hector Castillo",
+image: "images/hector_castillo.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 72,
+force: 84,
+danger: 87,
+charisme: 70,
+special: "Fou du bus"
+},
+
+{
+name: "Hector Trevino",
+image: "images/hector_trevino.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 81,
+force: 69,
+danger: 74,
+charisme: 88,
+special: "Rap sans limite"
+},
+
+{
+name: "Hezekiel Huotari",
+image: "images/hezekiel_huotari.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 77,
+force: 83,
+danger: 86,
+charisme: 67,
+special: "Tue sur ordre"
+},
+
+{
+name: "Harvey Freeman",
+image: "images/harvey_freeman.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 88,
+force: 65,
+danger: 72,
+charisme: 90,
+special: "Patron respecté"
+},
+
+{
+name: "Kayla",
+image: "images/kayla.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 71,
+force: 66,
+danger: 69,
+charisme: 92,
+special: "Folie attachante"
+},
+
+{
+name: "Keith Ross",
+image: "images/keith_ross.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 76,
+force: 74,
+danger: 78,
+charisme: 87,
+special: "Overtown clique"
+},
+
+{
+name: "Lewis",
+image: "images/lewis.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 70,
+force: 86,
+danger: 88,
+charisme: 67,
+special: "Bagarreur sanglant"
+},{
+name: "Jimmy Crawford",
+image: "images/jimmy_crawford.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 79,
+force: 70,
+danger: 72,
+charisme: 88,
+special: "Influenceur du vice"
+},
+
+{
+name: "Jamall",
+image: "images/jamall.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 74,
+force: 82,
+danger: 85,
+charisme: 76,
+special: "La foudre SMM"
+},
+
+{
+name: "Joseph Chpéko",
+image: "images/joseph_chpeko.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 81,
+force: 78,
+danger: 75,
+charisme: 73,
+special: "Autorité des Devils"
+},
+
+{
+name: "Jackson Brown",
+image: "images/jackson_brown.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 70,
+force: 86,
+danger: 87,
+charisme: 68,
+special: "Cavale infernale"
+},
+
+{
+name: "Kenneth St-John",
+image: "images/kenneth_stjohn.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 73,
+force: 84,
+danger: 82,
+charisme: 71,
+special: "Vice-duc des gueux"
+},
+
+{
+name: "Kayz Kush",
+image: "images/kayz_kush.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 77,
+force: 83,
+danger: 85,
+charisme: 69,
+special: "Balboa dans les veines"
+},
+
+{
+name: "Isaac Griffin",
+image: "images/isaac_griffin.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 80,
+force: 72,
+danger: 74,
+charisme: 84,
+special: "Hangover Repair"
+},
+
+{
+name: "James Barrows",
+image: "images/james_barrows.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 82,
+force: 74,
+danger: 70,
+charisme: 76,
+special: "Directeur de Bolingbroke"
+},{
+name: "Rust",
+image: "images/rust.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 88,
+force: 73,
+danger: 80,
+charisme: 69,
+special: "Maître des chiffres"
+},
+
+{
+name: "Riley Barrows",
+image: "images/riley_barrows.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 82,
+force: 70,
+danger: 72,
+charisme: 84,
+special: "Gros caractère"
+},
+
+{
+name: "Raven Carter",
+image: "images/raven_carter.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 86,
+force: 64,
+danger: 68,
+charisme: 83,
+special: "Femme d'affaire froide"
+},
+
+{
+name: "Marco Santini",
+image: "images/marco_santini.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 77,
+force: 79,
+danger: 81,
+charisme: 71,
+special: "Ancien Devil 1%"
+},
+
+{
+name: "Marcus West",
+image: "images/marcus_west.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 80,
+force: 78,
+danger: 76,
+charisme: 70,
+special: "Mary SAST"
+},
+
+{
+name: "Neli",
+image: "images/neli.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 74,
+force: 65,
+danger: 70,
+charisme: 92,
+special: "Double face"
+},
+
+{
+name: "Noeliax",
+image: "images/noeliax.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 81,
+force: 69,
+danger: 72,
+charisme: 78,
+special: "Rookie 102"
+},
+
+{
+name: "Kody Hall",
+image: "images/kody_hall.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 76,
+force: 71,
+danger: 75,
+charisme: 89,
+special: "Organisateur d'événements"
+},{
+name: "Sweeney",
+image: "images/sweeney.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 82,
+force: 66,
+danger: 68,
+charisme: 91,
+special: "Miss Los Santos"
+},
+
+{
+name: "Sime et Coca",
+image: "images/sime_coca.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 74,
+force: 83,
+danger: 86,
+charisme: 78,
+special: "Rois du territoire"
+},
+
+{
+name: "Smoke",
+image: "images/smoke.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 71,
+force: 80,
+danger: 88,
+charisme: 67,
+special: "Gang SMM"
+},
+
+{
+name: "Sombra",
+image: "images/sombra.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 83,
+force: 69,
+danger: 72,
+charisme: 86,
+special: "Chanteuse des ombres"
+},
+
+{
+name: "Switcher",
+image: "images/switcher.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 78,
+force: 74,
+danger: 79,
+charisme: 84,
+special: "Rappeur disque d'or"
+},
+
+{
+name: "Rey Brooks",
+image: "images/rey_brooks.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 81,
+force: 68,
+danger: 71,
+charisme: 88,
+special: "Protectrice"
+},
+
+{
+name: "Rubio",
+image: "images/rubio.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 79,
+force: 84,
+danger: 87,
+charisme: 73,
+special: "Most Wanted"
+},
+
+{
+name: "Silvio Castellianos",
+image: "images/silvio_castellianos.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 72,
+force: 77,
+danger: 82,
+charisme: 80,
+special: "Fou tropical"
+},{
+name: "Umbra",
+image: "images/umbra.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 82,
+force: 68,
+danger: 74,
+charisme: 86,
+special: "Black Wolf Family"
+},
+
+{
+name: "Warren Hope",
+image: "images/warren_hope.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 83,
+force: 79,
+danger: 81,
+charisme: 84,
+special: "Sang-froid SAST"
+},
+
+{
+name: "Yang Wu",
+image: "images/yang_wu.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 88,
+force: 82,
+danger: 85,
+charisme: 78,
+special: "Fureur du dragon"
+},
+
+{
+name: "Zikzee Tabar",
+image: "images/zikzee_tabar.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 70,
+force: 84,
+danger: 88,
+charisme: 79,
+special: "Folie de hooligan"
+},
+
+{
+name: "Sergo Exandus",
+image: "images/sergo_exandus.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 85,
+force: 83,
+danger: 91,
+charisme: 74,
+special: "Exécution froide"
+},
+
+{
+name: "Tao Vato",
+image: "images/tao_vato.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 86,
+force: 84,
+danger: 88,
+charisme: 90,
+special: "Leadership MC"
+},
+
+{
+name: "TekeuR Hall",
+image: "images/tekeur_hall.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 86,
+force: 80,
+danger: 88,
+charisme: 76,
+special: "Manipulation furtive"
+},
+
+{
+name: "Wesley Jones",
+image: "images/wesley_jones.png",
+rarity: "rare",
+displayRarity: "Rare",
+price: "1500$",
+intelligence: 70,
+force: 85,
+danger: 91,
+charisme: 72,
+special: "Rage du 46"
+},{
+name: "Yoro Shin",
+image: "images/yoro_shin.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 95,
+force: 82,
+danger: 94,
+charisme: 90,
+special: "Empereur de l'Ombre"
+},
+
+{
+name: "Zayra Cifuentes",
+image: "images/zayra_cifuentes.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 89,
+force: 76,
+danger: 84,
+charisme: 92,
+special: "Négociation Venimeuse"
+},
+
+{
+name: "Aitoarii Teikitohe",
+image: "images/aitoarii_teikitohe.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 88,
+force: 90,
+danger: 92,
+charisme: 84,
+special: "King of Knuckle Duster"
+},
+
+{
+name: "Albert Bentata",
+image: "images/albert_bentata.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 96,
+force: 55,
+danger: 60,
+charisme: 88,
+special: "Démêrdard Juridique"
+},
+
+{
+name: "Alejandro Peña 'Ruta'",
+image: "images/alejandro_ruta.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 86,
+force: 74,
+danger: 82,
+charisme: 88,
+special: "Homme de la Route"
+},
+
+{
+name: "Elarrya Campos",
+image: "images/elarrya_campos.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 94,
+force: 62,
+danger: 55,
+charisme: 91,
+special: "Miracle Médical"
+},
+
+{
+name: "Elio 'Mani' Clark",
+image: "images/elio_mani_clark.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 91,
+force: 60,
+danger: 86,
+charisme: 78,
+special: "Hacker de Haut Niveau"
+},
+
+{
+name: "Tonton Kalile",
+image: "images/tonton_kalile.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 90,
+force: 84,
+danger: 82,
+charisme: 86,
+special: "Discipline Militaire"
+},
+
+{
+name: "Penfield Cody",
+image: "images/penfield_cody.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 88,
+force: 79,
+danger: 94,
+charisme: 86,
+special: "Cerveau de Braquage"
+},
+
+{
+name: "Pierce Logan",
+image: "images/pierce_logan.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 82,
+force: 72,
+danger: 70,
+charisme: 95,
+special: "Vibes Positives"
+},
+
+{
+name: "Renato Nascimento",
+image: "images/renato_nascimento.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 95,
+force: 66,
+danger: 78,
+charisme: 92,
+special: "Plaidoirie Foudroyante"
+},
+
+{
+name: "T-Rock",
+image: "images/t_rock.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 87,
+force: 78,
+danger: 89,
+charisme: 84,
+special: "Maître Tatoueur"
+},
+
+{
+name: "Sha'Quille Hill",
+image: "images/shaquille_hill.png",
+rarity: "epique",
+displayRarity: "Épique",
+price: "3500$",
+intelligence: 83,
+force: 91,
+danger: 93,
+charisme: 87,
+special: "Respect de la Rue"
+},
     const grid = document.getElementById("cardGrid");
     const search = document.getElementById("search");
     const filter = document.getElementById("filter");
