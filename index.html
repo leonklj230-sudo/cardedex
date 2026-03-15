@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Los Santos Cardedex</title>
+<style>
+body{
+font-family:Arial;
+background:#0d0d0d;
+color:white;
+text-align:center;
+}
+
+h1{
+margin-top:40px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,200px);
+gap:20px;
+justify-content:center;
+margin-top:40px;
+}
+
+.card{
+background:#1a1a1a;
+border-radius:10px;
+padding:10px;
+}
+
+.card img{
+width:100%;
+border-radius:8px;
+}
+
+.rare{border:2px solid blue;}
+.epic{border:2px solid red;}
+.legendary{border:2px solid orange;}
+</style>
+</head>
+
+<body>
+
+<h1>Los Santos Cardedex</h1>
+
+<div class="grid">
+
+<div class="card epic">
+<img src="https://via.placeholder.com/200x300">
+<h3>Renato Nascimento</h3>
+<p>Epic</p>
+</div>
+
+<div class="card rare">
+<img src="https://via.placeholder.com/200x300">
+<h3>Ghost Pookie</h3>
+<p>Rare</p>
+</div>
+
+<div class="card legendary">
+<img src="https://via.placeholder.com/200x300">
+<h3>Biggy Mackenzy</h3>
+<p>Legendary</p>
+</div>
+
+</div>
+
+</body>
+</html>
