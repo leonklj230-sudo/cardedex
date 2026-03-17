@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Los Santos Cardedex V3</title>
+  <title>Los Santos Cardedex V4</title>
   <style>
     * { box-sizing: border-box; }
 
@@ -13,6 +13,8 @@
       --blue: #2563eb;
       --red: #dc2626;
       --gold: #f59e0b;
+      --purple: #7c3aed;
+      --text-soft: #aaaaaa;
     }
 
     body {
@@ -51,7 +53,7 @@
       gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
-      padding: 0 20px 20px;
+      padding: 0 20px 16px;
     }
 
     input, select {
@@ -70,32 +72,115 @@
       box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
     }
 
+    .section {
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 12px 20px 4px;
+    }
+
+    .section-title {
+      margin: 0 0 14px;
+      font-size: 22px;
+      letter-spacing: 0.6px;
+    }
+
+    .leaderboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .leaderboard-card {
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
+        linear-gradient(180deg, #161616, #0c0c0c);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+    }
+
+    .leaderboard-card h3 {
+      margin: 0 0 10px;
+      font-size: 15px;
+      color: #ddd;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .leaderboard-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 14px;
+    }
+
+    .leaderboard-item:last-child {
+      border-bottom: none;
+    }
+
+    .leaderboard-rank {
+      color: #888;
+      margin-right: 8px;
+    }
+
+    .leaderboard-name {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .leaderboard-value {
+      font-weight: bold;
+      color: #fff;
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(235px, 1fr));
       gap: 24px;
       padding: 20px;
       max-width: 1450px;
       margin: auto;
     }
 
-    .card {
+    .flip-card {
+      perspective: 1200px;
+      height: 430px;
+      cursor: pointer;
+    }
+
+    .flip-card-inner {
       position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.7s ease;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner,
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
       border-radius: 22px;
       overflow: hidden;
-      cursor: pointer;
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
-      box-shadow: 0 0 0 1px #222, 0 14px 30px rgba(0,0,0,0.28);
       isolation: isolate;
+      box-shadow: 0 0 0 1px #222, 0 14px 30px rgba(0,0,0,0.28);
       background: linear-gradient(180deg, #141414, #0b0b0b);
     }
 
-    .card:hover {
-      transform: translateY(-8px) scale(1.01);
-      box-shadow: 0 0 0 1px #333, 0 22px 35px rgba(0,0,0,0.42);
-    }
-
-    .card::before {
+    .card-face.front::before,
+    .card-face.back::before {
       content: "";
       position: absolute;
       inset: 0;
@@ -106,11 +191,12 @@
       z-index: 3;
     }
 
-    .card:hover::before {
+    .flip-card:hover .card-face.front::before,
+    .flip-card:hover .card-face.back::before {
       transform: translateX(120%);
     }
 
-    .card.holo::after {
+    .card-face.holo::after {
       content: "";
       position: absolute;
       inset: 0;
@@ -134,25 +220,58 @@
       100% { transform: translateX(-8%) translateY(0%) rotate(0deg); }
     }
 
-    .card.rare {
+    .rare {
       border: 2px solid var(--blue);
       background:
         radial-gradient(circle at top right, rgba(37,99,235,0.18), transparent 35%),
         linear-gradient(180deg, #141821, #0b0b0b);
     }
 
-    .card.epique {
+    .epique {
       border: 2px solid var(--red);
       background:
         radial-gradient(circle at top right, rgba(220,38,38,0.18), transparent 35%),
         linear-gradient(180deg, #1c1212, #0b0b0b);
     }
 
-    .card.legendaire {
+    .legendaire {
       border: 2px solid var(--gold);
       background:
         radial-gradient(circle at top right, rgba(245,158,11,0.18), transparent 35%),
         linear-gradient(180deg, #22180b, #0b0b0b);
+    }
+
+    .unique {
+      border: 2px solid var(--purple);
+      background:
+        radial-gradient(circle at top right, rgba(124,58,237,0.22), transparent 35%),
+        linear-gradient(180deg, #180f23, #08070d);
+      box-shadow:
+        0 0 0 1px rgba(124,58,237,0.2),
+        0 0 24px rgba(124,58,237,0.22),
+        0 14px 30px rgba(0,0,0,0.35);
+    }
+
+    .unique::after {
+      content: "";
+      position: absolute;
+      inset: -30%;
+      background: conic-gradient(
+        from 0deg,
+        rgba(124,58,237,0.0),
+        rgba(255,255,255,0.14),
+        rgba(124,58,237,0.0),
+        rgba(255,215,0,0.14),
+        rgba(124,58,237,0.0)
+      );
+      animation: rotateAura 7s linear infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    @keyframes rotateAura {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
     }
 
     .card-frame-bg {
@@ -164,7 +283,7 @@
       z-index: 1;
     }
 
-    .card img {
+    .card-face.front img {
       position: relative;
       z-index: 0;
       width: 100%;
@@ -215,8 +334,13 @@
       background: var(--gold);
       color: black;
     }
+    .unique .tag {
+      background: var(--purple);
+      color: white;
+    }
 
-    .card h3 {
+    .card h3,
+    .back-title {
       margin: 0 0 8px;
       font-size: 21px;
       line-height: 1.15;
@@ -250,12 +374,76 @@
       font-size: 14px;
     }
 
-    .click-hint {
+    .click-hint,
+    .flip-hint {
       margin-top: 10px;
       font-size: 12px;
       color: #8f8f8f;
       text-transform: uppercase;
       letter-spacing: 0.8px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      padding: 5px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.4px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: white;
+    }
+
+    .badge.special {
+      background: rgba(245,158,11,0.16);
+      border-color: rgba(245,158,11,0.28);
+      color: #ffd78e;
+    }
+
+    .card-face.back {
+      transform: rotateY(180deg);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .back-panel {
+      position: relative;
+      z-index: 4;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.04);
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .back-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .back-stat {
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 10px;
+      font-size: 12px;
+    }
+
+    .back-stat strong {
+      display: block;
+      font-size: 18px;
+      margin-top: 4px;
     }
 
     .empty-state {
@@ -266,7 +454,7 @@
       grid-column: 1 / -1;
     }
 
-    /* POPUP HORIZONTALE */
+    /* MODAL */
     .modal {
       position: fixed;
       inset: 0;
@@ -327,6 +515,11 @@
     .modal-box.legendaire {
       border-color: #f59e0b;
       box-shadow: 0 25px 80px rgba(0,0,0,0.55), 0 0 35px rgba(245,158,11,0.22);
+    }
+
+    .modal-box.unique {
+      border-color: var(--purple);
+      box-shadow: 0 25px 80px rgba(0,0,0,0.55), 0 0 36px rgba(124,58,237,0.25);
     }
 
     .modal-box.holo::after {
@@ -472,20 +665,10 @@
       white-space: nowrap;
     }
 
-    .modal-rarity.rare {
-      background: #2563eb;
-      color: white;
-    }
-
-    .modal-rarity.epique {
-      background: #dc2626;
-      color: white;
-    }
-
-    .modal-rarity.legendaire {
-      background: #f59e0b;
-      color: black;
-    }
+    .modal-rarity.rare { background: #2563eb; color: white; }
+    .modal-rarity.epique { background: #dc2626; color: white; }
+    .modal-rarity.legendaire { background: #f59e0b; color: black; }
+    .modal-rarity.unique { background: var(--purple); color: white; }
 
     .modal-rarity-icon {
       font-size: 18px;
@@ -690,6 +873,11 @@
     <div class="subtitle">Collection RP • Série Black Streets</div>
   </header>
 
+  <section class="section">
+    <h2 class="section-title">Classement global</h2>
+    <div class="leaderboard-grid" id="leaderboards"></div>
+  </section>
+
   <div class="topbar">
     <input type="text" id="search" placeholder="Rechercher un personnage..." />
     <select id="filter">
@@ -697,6 +885,7 @@
       <option value="rare">Rare</option>
       <option value="epique">Épique</option>
       <option value="legendaire">Légendaire</option>
+      <option value="unique">Unique</option>
     </select>
   </div>
 
@@ -719,6 +908,7 @@
               <div class="modal-name" id="modalName"></div>
               <div class="modal-series" id="modalSeries">Black Streets Series</div>
               <div class="modal-number" id="modalCardNumber">#001</div>
+              <div class="badge-row" id="modalBadges"></div>
             </div>
 
             <div class="modal-head-right">
@@ -805,7 +995,8 @@
         danger: 83,
         charisme: 76,
         special: "Malistrip",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Most Wanted", "Gang"]
       },
       {
         name: "Alvaro Cardinas",
@@ -818,7 +1009,8 @@
         danger: 80,
         charisme: 65,
         special: "Bagarreur loyal",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Bagarreur"]
       },
       {
         name: "Aurmelya Haldorsen",
@@ -831,7 +1023,8 @@
         danger: 73,
         charisme: 88,
         special: "Addiction aux défis",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["VIP"]
       },
       {
         name: "Chavo",
@@ -844,7 +1037,8 @@
         danger: 79,
         charisme: 71,
         special: "Chimiste hors pair",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Chimiste"]
       },
       {
         name: "Cole McGarrett",
@@ -857,7 +1051,8 @@
         danger: 87,
         charisme: 70,
         special: "Traqueur Most Wanted",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Most Wanted", "Traqueur"]
       },
       {
         name: "DK",
@@ -870,7 +1065,8 @@
         danger: 72,
         charisme: 81,
         special: "Flash du Hood",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Rookie"]
       },
       {
         name: "Elliot Wilson",
@@ -883,7 +1079,8 @@
         danger: 82,
         charisme: 68,
         special: "Matricule 48",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Police"]
       },
       {
         name: "Ethan Shaws",
@@ -896,7 +1093,8 @@
         danger: 69,
         charisme: 83,
         special: "Calme stratégique",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Stratège"]
       },
       {
         name: "Dim Kleein",
@@ -909,7 +1107,8 @@
         danger: 76,
         charisme: 79,
         special: "Relation Benny's",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Business"]
       },
       {
         name: "Kahel Brooks",
@@ -922,7 +1121,8 @@
         danger: 83,
         charisme: 72,
         special: "Mauvais bagarreur",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Bagarreur"]
       },
       {
         name: "Logan Hayes",
@@ -935,7 +1135,8 @@
         danger: 76,
         charisme: 71,
         special: "Justice froide",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Justice"]
       },
       {
         name: "Markus 'Shorty' Kelly",
@@ -948,7 +1149,8 @@
         danger: 88,
         charisme: 69,
         special: "Tentative fatale",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Tueur"]
       },
       {
         name: "Mascotte",
@@ -961,7 +1163,8 @@
         danger: 58,
         charisme: 90,
         special: "La vachette",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Mascotte", "VIP"]
       },
       {
         name: "Flako Sinetavarez",
@@ -974,7 +1177,8 @@
         danger: 84,
         charisme: 76,
         special: "Vice-président dangereux",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Gang Leader"]
       },
       {
         name: "Ghost 'Pookie'",
@@ -987,7 +1191,8 @@
         danger: 86,
         charisme: 90,
         special: "Manipulation de rue",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Manipulateur", "VIP"]
       },
       {
         name: "Hector Castillo",
@@ -1000,7 +1205,8 @@
         danger: 87,
         charisme: 70,
         special: "Fou du bus",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Chaotique"]
       },
       {
         name: "Hector Trevino",
@@ -1008,12 +1214,13 @@
         rarity: "rare",
         displayRarity: "Rare",
         price: "1500$",
-        intelligence: 32,
-        force: 21,
-        danger: 100,
-        charisme: 86,
-        special: "1er rappeur apres switcher",
-        series: "Black Streets Series"
+        intelligence: 81,
+        force: 69,
+        danger: 74,
+        charisme: 88,
+        special: "Rap sans limite",
+        series: "Black Streets Series",
+        badges: ["Artiste"]
       },
       {
         name: "Hezekiel Huotari",
@@ -1026,7 +1233,8 @@
         danger: 86,
         charisme: 67,
         special: "Tue sur ordre",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Tueur à gages"]
       },
       {
         name: "Harvey Freeman",
@@ -1039,7 +1247,8 @@
         danger: 72,
         charisme: 90,
         special: "Patron respecté",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Businessman", "VIP"]
       },
       {
         name: "Kayla",
@@ -1052,7 +1261,8 @@
         danger: 69,
         charisme: 92,
         special: "Folie attachante",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["VIP"]
       },
       {
         name: "Keith Ross",
@@ -1065,7 +1275,8 @@
         danger: 78,
         charisme: 87,
         special: "Overtown clique",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Gang"]
       },
       {
         name: "Lewis",
@@ -1078,7 +1289,8 @@
         danger: 88,
         charisme: 67,
         special: "Bagarreur sanglant",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Bagarreur"]
       },
       {
         name: "Jimmy Crawford",
@@ -1091,7 +1303,8 @@
         danger: 72,
         charisme: 88,
         special: "Influenceur du vice",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Influence"]
       },
       {
         name: "Jamall",
@@ -1104,7 +1317,8 @@
         danger: 85,
         charisme: 76,
         special: "La foudre SMM",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Gang"]
       },
       {
         name: "Joseph Chpéko",
@@ -1117,7 +1331,8 @@
         danger: 75,
         charisme: 73,
         special: "Autorité des Devils",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["MC", "Leader"]
       },
       {
         name: "Jackson Brown",
@@ -1130,7 +1345,8 @@
         danger: 87,
         charisme: 68,
         special: "Cavale infernale",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Most Wanted"]
       },
       {
         name: "Kenneth St-John",
@@ -1143,7 +1359,8 @@
         danger: 82,
         charisme: 71,
         special: "Vice-duc des gueux",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["MC"]
       },
       {
         name: "Kayz Kush",
@@ -1156,7 +1373,8 @@
         danger: 85,
         charisme: 69,
         special: "Balboa dans les veines",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Gang"]
       },
       {
         name: "Isaac Griffin",
@@ -1169,7 +1387,8 @@
         danger: 74,
         charisme: 84,
         special: "Hangover Repair",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Repair"]
       },
       {
         name: "James Barrows",
@@ -1182,7 +1401,8 @@
         danger: 70,
         charisme: 76,
         special: "Directeur de Bolingbroke",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Administration"]
       },
       {
         name: "Rust",
@@ -1195,7 +1415,8 @@
         danger: 80,
         charisme: 69,
         special: "Maître des chiffres",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Businessman"]
       },
       {
         name: "Riley Barrows",
@@ -1208,7 +1429,8 @@
         danger: 72,
         charisme: 84,
         special: "Gros caractère",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["VIP"]
       },
       {
         name: "Raven Carter",
@@ -1221,7 +1443,8 @@
         danger: 68,
         charisme: 83,
         special: "Femme d'affaire froide",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Businesswoman"]
       },
       {
         name: "Marco Santini",
@@ -1234,7 +1457,8 @@
         danger: 81,
         charisme: 71,
         special: "Ancien Devil 1%",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Ancien", "MC"]
       },
       {
         name: "Marcus West",
@@ -1247,7 +1471,8 @@
         danger: 76,
         charisme: 70,
         special: "Mary SAST",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["SAST"]
       },
       {
         name: "Neli",
@@ -1260,7 +1485,8 @@
         danger: 70,
         charisme: 92,
         special: "Double face",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Snitch"]
       },
       {
         name: "Noeliax",
@@ -1273,7 +1499,8 @@
         danger: 72,
         charisme: 78,
         special: "Rookie 102",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Rookie"]
       },
       {
         name: "Kody Hall",
@@ -1286,7 +1513,8 @@
         danger: 75,
         charisme: 89,
         special: "Organisateur d'événements",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Event"]
       },
       {
         name: "Sweeney",
@@ -1299,7 +1527,8 @@
         danger: 68,
         charisme: 91,
         special: "Miss Los Santos",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["VIP", "Celebrity"]
       },
       {
         name: "Sime et Coca",
@@ -1312,7 +1541,8 @@
         danger: 86,
         charisme: 78,
         special: "Rois du territoire",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Gang Leader"]
       },
       {
         name: "Smoke",
@@ -1325,7 +1555,8 @@
         danger: 88,
         charisme: 67,
         special: "Gang SMM",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Gang"]
       },
       {
         name: "Sombra",
@@ -1338,7 +1569,8 @@
         danger: 72,
         charisme: 86,
         special: "Chanteuse des ombres",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Artiste"]
       },
       {
         name: "Switcher",
@@ -1347,11 +1579,12 @@
         displayRarity: "Rare",
         price: "1500$",
         intelligence: 78,
-        force: 100,
-        danger: 83,
-        charisme: 79,
-        special: "disque d'or",
-        series: "Black Streets Series"
+        force: 74,
+        danger: 79,
+        charisme: 84,
+        special: "Rappeur disque d'or",
+        series: "Black Streets Series",
+        badges: ["Artiste", "VIP"]
       },
       {
         name: "Rey Brooks",
@@ -1364,7 +1597,8 @@
         danger: 71,
         charisme: 88,
         special: "Protectrice",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Protectrice"]
       },
       {
         name: "Rubio",
@@ -1377,7 +1611,8 @@
         danger: 87,
         charisme: 73,
         special: "Most Wanted",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Most Wanted", "Special"]
       },
       {
         name: "Silvio Castellianos",
@@ -1390,7 +1625,8 @@
         danger: 82,
         charisme: 80,
         special: "Fou tropical",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Chaotique"]
       },
       {
         name: "Umbra",
@@ -1403,7 +1639,8 @@
         danger: 74,
         charisme: 86,
         special: "Black Wolf Family",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Family"]
       },
       {
         name: "Warren Hope",
@@ -1416,7 +1653,8 @@
         danger: 81,
         charisme: 84,
         special: "Sang-froid SAST",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["SAST"]
       },
       {
         name: "Yang Wu",
@@ -1429,7 +1667,8 @@
         danger: 85,
         charisme: 78,
         special: "Fureur du dragon",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Dragon"]
       },
       {
         name: "Zikzee Tabar",
@@ -1442,7 +1681,8 @@
         danger: 88,
         charisme: 79,
         special: "Folie de hooligan",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Hooligan"]
       },
       {
         name: "Sergo Exandus",
@@ -1455,7 +1695,8 @@
         danger: 91,
         charisme: 74,
         special: "Exécution froide",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Exécuteur", "Special"]
       },
       {
         name: "Tao Vato",
@@ -1468,7 +1709,8 @@
         danger: 88,
         charisme: 90,
         special: "Leadership MC",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Leader", "MC"]
       },
       {
         name: "TekeuR Hall",
@@ -1481,7 +1723,8 @@
         danger: 88,
         charisme: 76,
         special: "Manipulation furtive",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Furtif"]
       },
       {
         name: "Wesley Jones",
@@ -1494,7 +1737,8 @@
         danger: 91,
         charisme: 72,
         special: "Rage du 46",
-        series: "Black Streets Series"
+        series: "Black Streets Series",
+        badges: ["Gang", "Special"]
       },
       {
         name: "Yoro Shin",
@@ -1507,7 +1751,8 @@
         danger: 94,
         charisme: 90,
         special: "Empereur de l'Ombre",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Legend", "Special"]
       },
       {
         name: "Zayra Cifuentes",
@@ -1520,7 +1765,8 @@
         danger: 84,
         charisme: 92,
         special: "Négociation Venimeuse",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Negotiator"]
       },
       {
         name: "Aitoarii Teikitohe",
@@ -1533,7 +1779,8 @@
         danger: 92,
         charisme: 84,
         special: "King of Knuckle Duster",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Boss"]
       },
       {
         name: "Albert Bentata",
@@ -1546,7 +1793,8 @@
         danger: 60,
         charisme: 88,
         special: "Démêrdard Juridique",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Law", "Special"]
       },
       {
         name: "Alejandro Peña 'Ruta'",
@@ -1559,7 +1807,8 @@
         danger: 82,
         charisme: 88,
         special: "Homme de la Route",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Roadman"]
       },
       {
         name: "Elarrya Campos",
@@ -1572,7 +1821,8 @@
         danger: 55,
         charisme: 91,
         special: "Miracle Médical",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Medic", "Special"]
       },
       {
         name: "Elio 'Mani' Clark",
@@ -1585,7 +1835,8 @@
         danger: 86,
         charisme: 78,
         special: "Hacker de Haut Niveau",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Hacker", "Special"]
       },
       {
         name: "Tonton Kalile",
@@ -1598,7 +1849,8 @@
         danger: 82,
         charisme: 86,
         special: "Discipline Militaire",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Military"]
       },
       {
         name: "Penfield Cody",
@@ -1611,7 +1863,8 @@
         danger: 94,
         charisme: 86,
         special: "Cerveau de Braquage",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Braqueur", "Special"]
       },
       {
         name: "Pierce Logan",
@@ -1624,7 +1877,8 @@
         danger: 70,
         charisme: 95,
         special: "Vibes Positives",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["VIP"]
       },
       {
         name: "Renato Nascimento",
@@ -1637,7 +1891,8 @@
         danger: 78,
         charisme: 92,
         special: "Plaidoirie Foudroyante",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Law", "VIP"]
       },
       {
         name: "T-Rock",
@@ -1650,7 +1905,8 @@
         danger: 89,
         charisme: 84,
         special: "Maître Tatoueur",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Artist"]
       },
       {
         name: "Sha'Quille Hill",
@@ -1663,32 +1919,38 @@
         danger: 93,
         charisme: 87,
         special: "Respect de la Rue",
-        series: "Crimson Legends"
+        series: "Crimson Legends",
+        badges: ["Respect", "Special"]
       },
       {
         name: "Don Vercetti",
         image: "images/Capture d'écran 2026-03-14 195108.png",
-        rarity: "legendaire",
-        displayRarity: "Légendaire",
-        price: "7000$",
-        intelligence: 98,
-        force: 88,
-        danger: 99,
-        charisme: 96,
+        rarity: "unique",
+        displayRarity: "Unique",
+        price: "12000$",
+        intelligence: 99,
+        force: 92,
+        danger: 100,
+        charisme: 98,
         special: "Roi absolu de Los Santos",
-        series: "Golden Crown Series"
+        series: "Golden Crown Series",
+        badges: ["Unique", "Legend", "Boss", "Special"]
       }
     ];
 
     const rarityIcons = {
       rare: "🔷",
       epique: "🔺",
-      legendaire: "👑"
+      legendaire: "👑",
+      unique: "💎"
     };
+
+    const specialBadgeNames = ["Unique", "Legend", "Special", "Boss", "Most Wanted"];
 
     const grid = document.getElementById("cardGrid");
     const search = document.getElementById("search");
     const filter = document.getElementById("filter");
+    const leaderboards = document.getElementById("leaderboards");
 
     const modal = document.getElementById("cardModal");
     const modalBox = document.getElementById("modalBox");
@@ -1704,6 +1966,7 @@
     const modalPrice = document.getElementById("modalPrice");
     const modalFooterLeft = document.getElementById("modalFooterLeft");
     const modalFooterRight = document.getElementById("modalFooterRight");
+    const modalBadges = document.getElementById("modalBadges");
 
     const modalIntelligenceValue = document.getElementById("modalIntelligenceValue");
     const modalForceValue = document.getElementById("modalForceValue");
@@ -1716,8 +1979,8 @@
     const modalCharismeBar = document.getElementById("modalCharismeBar");
 
     function getCardClasses(card) {
-      const holo = card.rarity === "epique" || card.rarity === "legendaire" ? "holo" : "";
-      return `card ${card.rarity} ${holo}`.trim();
+      const holo = card.rarity === "epique" || card.rarity === "legendaire" || card.rarity === "unique" ? "holo" : "";
+      return `${card.rarity} ${holo}`.trim();
     }
 
     function setBar(barEl, value) {
@@ -1726,6 +1989,16 @@
         setTimeout(() => {
           barEl.style.width = `${Math.max(0, Math.min(100, value))}%`;
         }, 80);
+      });
+    }
+
+    function renderBadges(container, badges = []) {
+      container.innerHTML = "";
+      badges.forEach(badge => {
+        const el = document.createElement("span");
+        el.className = `badge ${specialBadgeNames.includes(badge) ? "special" : ""}`.trim();
+        el.textContent = badge;
+        container.appendChild(el);
       });
     }
 
@@ -1744,13 +2017,14 @@
       modalPrice.textContent = card.price;
       modalFooterLeft.textContent = "Los Santos Cardedex";
       modalFooterRight.textContent = card.series || "Edition Urbaine";
+      renderBadges(modalBadges, card.badges || []);
 
       modalIntelligenceValue.textContent = card.intelligence;
       modalForceValue.textContent = card.force;
       modalDangerValue.textContent = card.danger;
       modalCharismeValue.textContent = card.charisme;
 
-      modalBox.className = `modal-box ${card.rarity} ${card.rarity === "epique" || card.rarity === "legendaire" ? "holo" : ""}`;
+      modalBox.className = `modal-box ${getCardClasses(card)}`;
 
       modal.classList.add("active");
       document.body.style.overflow = "hidden";
@@ -1766,14 +2040,81 @@
       document.body.style.overflow = "";
     }
 
+    function createFront(card, cardIndex, icon) {
+      const badgesHTML = (card.badges || [])
+        .slice(0, 2)
+        .map(badge => `<span class="badge ${specialBadgeNames.includes(badge) ? "special" : ""}">${badge}</span>`)
+        .join("");
+
+      return `
+        <div class="card-frame-bg"></div>
+        <img src="${card.image}" alt="${card.name}">
+        <div class="card-content">
+          <div class="card-topline">
+            <div class="card-number">#${String(cardIndex).padStart(3, "0")}</div>
+            <div class="rarity-icon">${icon}</div>
+          </div>
+          <div class="tag">${card.displayRarity}</div>
+          ${badgesHTML ? `<div class="badge-row">${badgesHTML}</div>` : ""}
+          <h3>${card.name}</h3>
+          <div class="series-line">${card.series || "Black Streets Series"}</div>
+          <div class="stats">
+            INT: ${card.intelligence}<br>
+            FOR: ${card.force}<br>
+            DNG: ${card.danger}<br>
+            CHA: ${card.charisme}
+          </div>
+          <div class="special">⭐ ${card.special}</div>
+          <div class="price">💰 ${card.price}</div>
+          <div class="click-hint">Cliquer pour détail</div>
+        </div>
+      `;
+    }
+
+    function createBack(card, cardIndex) {
+      const badgesHTML = (card.badges || [])
+        .map(badge => `<span class="badge ${specialBadgeNames.includes(badge) ? "special" : ""}">${badge}</span>`)
+        .join("");
+
+      return `
+        <div class="card-frame-bg"></div>
+        <div class="back-panel">
+          <div class="card-number">#${String(cardIndex).padStart(3, "0")}</div>
+          <div class="back-title">${card.name}</div>
+          <div class="series-line">${card.series || "Black Streets Series"}</div>
+          ${badgesHTML ? `<div class="badge-row">${badgesHTML}</div>` : ""}
+        </div>
+
+        <div class="back-panel">
+          <div class="section-title">Capacité spéciale</div>
+          <div class="special">${card.special}</div>
+          <div class="price">💰 ${card.price}</div>
+        </div>
+
+        <div class="back-grid">
+          <div class="back-stat">INT<strong>${card.intelligence}</strong></div>
+          <div class="back-stat">FOR<strong>${card.force}</strong></div>
+          <div class="back-stat">DNG<strong>${card.danger}</strong></div>
+          <div class="back-stat">CHA<strong>${card.charisme}</strong></div>
+        </div>
+
+        <div class="flip-hint">Survole pour retourner</div>
+      `;
+    }
+
     function renderCards() {
       const searchValue = search.value.toLowerCase().trim();
       const filterValue = filter.value;
 
       const filteredCards = cards.filter(card => {
-        const matchName = card.name.toLowerCase().includes(searchValue);
+        const matchText =
+          card.name.toLowerCase().includes(searchValue) ||
+          card.special.toLowerCase().includes(searchValue) ||
+          (card.series || "").toLowerCase().includes(searchValue) ||
+          (card.badges || []).some(b => b.toLowerCase().includes(searchValue));
+
         const matchRarity = filterValue === "all" || card.rarity === filterValue;
-        return matchName && matchRarity;
+        return matchText && matchRarity;
       });
 
       grid.innerHTML = "";
@@ -1784,38 +2125,76 @@
       }
 
       filteredCards.forEach(card => {
-        const div = document.createElement("div");
-        div.className = getCardClasses(card);
-
         const cardIndex = cards.indexOf(card) + 1;
         const icon = rarityIcons[card.rarity] || "◆";
 
-        div.innerHTML = `
-          <div class="card-frame-bg"></div>
-          <img src="${card.image}" alt="${card.name}">
-          <div class="card-content">
-            <div class="card-topline">
-              <div class="card-number">#${String(cardIndex).padStart(3, "0")}</div>
-              <div class="rarity-icon">${icon}</div>
+        const wrapper = document.createElement("div");
+        wrapper.className = "flip-card";
+
+        wrapper.innerHTML = `
+          <div class="flip-card-inner">
+            <div class="card-face front ${getCardClasses(card)}">
+              ${createFront(card, cardIndex, icon)}
             </div>
-            <div class="tag">${card.displayRarity}</div>
-            <h3>${card.name}</h3>
-            <div class="series-line">${card.series || "Black Streets Series"}</div>
-            <div class="stats">
-              INT: ${card.intelligence}<br>
-              FOR: ${card.force}<br>
-              DNG: ${card.danger}<br>
-              CHA: ${card.charisme}
+            <div class="card-face back ${getCardClasses(card)}">
+              ${createBack(card, cardIndex)}
             </div>
-            <div class="special">⭐ ${card.special}</div>
-            <div class="price">💰 ${card.price}</div>
-            <div class="click-hint">Cliquer pour voir</div>
           </div>
         `;
 
-        div.addEventListener("click", () => openModal(card));
-        grid.appendChild(div);
+        wrapper.addEventListener("click", (e) => {
+          if (window.innerWidth <= 900) {
+            if (!wrapper.classList.contains("flipped")) {
+              e.preventDefault();
+              wrapper.classList.add("flipped");
+              return;
+            }
+          }
+          openModal(card);
+        });
+
+        grid.appendChild(wrapper);
       });
+    }
+
+    function topThreeBy(key) {
+      return [...cards].sort((a, b) => b[key] - a[key]).slice(0, 3);
+    }
+
+    function topThreeByPrice() {
+      return [...cards]
+        .sort((a, b) => parseInt(b.price) - parseInt(a.price))
+        .slice(0, 3);
+    }
+
+    function topUnique() {
+      return cards.filter(c => c.rarity === "unique" || c.rarity === "legendaire").slice(0, 3);
+    }
+
+    function leaderboardBlock(title, items, formatter) {
+      const div = document.createElement("div");
+      div.className = "leaderboard-card";
+      div.innerHTML = `<h3>${title}</h3>`;
+      items.forEach((item, index) => {
+        const row = document.createElement("div");
+        row.className = "leaderboard-item";
+        row.innerHTML = `
+          <div class="leaderboard-name"><span class="leaderboard-rank">#${index + 1}</span>${item.name}</div>
+          <div class="leaderboard-value">${formatter(item)}</div>
+        `;
+        div.appendChild(row);
+      });
+      return div;
+    }
+
+    function renderLeaderboards() {
+      leaderboards.innerHTML = "";
+      leaderboards.appendChild(leaderboardBlock("Top Intelligence", topThreeBy("intelligence"), i => i.intelligence));
+      leaderboards.appendChild(leaderboardBlock("Top Force", topThreeBy("force"), i => i.force));
+      leaderboards.appendChild(leaderboardBlock("Top Danger", topThreeBy("danger"), i => i.danger));
+      leaderboards.appendChild(leaderboardBlock("Top Charisme", topThreeBy("charisme"), i => i.charisme));
+      leaderboards.appendChild(leaderboardBlock("Top Valeur", topThreeByPrice(), i => i.price));
+      leaderboards.appendChild(leaderboardBlock("Ultra rares", topUnique(), i => i.displayRarity));
     }
 
     search.addEventListener("input", renderCards);
@@ -1833,6 +2212,7 @@
       }
     });
 
+    renderLeaderboards();
     renderCards();
   </script>
 </body>
