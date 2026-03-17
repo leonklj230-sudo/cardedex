@@ -10,7 +10,9 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0b0b0b;
+      background:
+        radial-gradient(circle at top, rgba(255,255,255,0.05), transparent 30%),
+        linear-gradient(180deg, #0b0b0b 0%, #070707 100%);
       color: white;
     }
 
@@ -22,6 +24,8 @@
     h1 {
       margin: 0 0 20px;
       font-size: 40px;
+      letter-spacing: 1px;
+      text-shadow: 0 0 18px rgba(255,255,255,0.08);
     }
 
     .topbar {
@@ -34,11 +38,18 @@
 
     input, select {
       padding: 12px 14px;
-      border-radius: 10px;
-      border: 1px solid #333;
+      border-radius: 12px;
+      border: 1px solid #2b2b2b;
       background: #161616;
       color: white;
       min-width: 220px;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #666;
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
     }
 
     .grid {
@@ -51,15 +62,18 @@
     }
 
     .card {
-      background: #151515;
-      border-radius: 16px;
+      background: linear-gradient(180deg, #161616 0%, #101010 100%);
+      border-radius: 18px;
       overflow: hidden;
-      transition: 0.2s;
-      box-shadow: 0 0 0 1px #222;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      box-shadow: 0 0 0 1px #222, 0 10px 25px rgba(0,0,0,0.25);
+      cursor: pointer;
+      position: relative;
     }
 
     .card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-6px);
+      box-shadow: 0 0 0 1px #333, 0 18px 35px rgba(0,0,0,0.38);
     }
 
     .card img {
@@ -77,6 +91,7 @@
     .card h3 {
       margin: 0 0 8px;
       font-size: 22px;
+      line-height: 1.2;
     }
 
     .tag {
@@ -90,6 +105,7 @@
 
     .rare {
       border: 2px solid #1d4ed8;
+      box-shadow: 0 0 0 1px rgba(29, 78, 216, 0.15), 0 10px 25px rgba(0,0,0,0.25);
     }
     .rare .tag {
       background: #1d4ed8;
@@ -97,6 +113,7 @@
 
     .epique {
       border: 2px solid #dc2626;
+      box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.15), 0 10px 25px rgba(0,0,0,0.25);
     }
     .epique .tag {
       background: #dc2626;
@@ -104,6 +121,7 @@
 
     .legendaire {
       border: 2px solid #f59e0b;
+      box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.15), 0 10px 25px rgba(0,0,0,0.25);
     }
     .legendaire .tag {
       background: #f59e0b;
@@ -129,6 +147,226 @@
       color: #aaa;
       font-size: 14px;
     }
+
+    /* MODAL */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 2000;
+    }
+
+    .modal.active {
+      display: flex;
+      animation: fadeIn 0.18s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .modal-box {
+      width: min(100%, 1000px);
+      background: linear-gradient(180deg, #151515 0%, #0f0f0f 100%);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      border: 1px solid #2a2a2a;
+      animation: popIn 0.2s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.96);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .modal-image-wrap {
+      background: #0f0f0f;
+      min-height: 540px;
+    }
+
+    .modal-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .modal-info {
+      padding: 26px;
+      position: relative;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 50%;
+      background: #242424;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .close-btn:hover {
+      background: #353535;
+      transform: scale(1.05);
+    }
+
+    .modal-rarity {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 14px;
+    }
+
+    .modal-rarity.rare {
+      background: #1d4ed8;
+      border: none;
+      color: white;
+    }
+
+    .modal-rarity.epique {
+      background: #dc2626;
+      border: none;
+      color: white;
+    }
+
+    .modal-rarity.legendaire {
+      background: #f59e0b;
+      border: none;
+      color: black;
+    }
+
+    .modal-title {
+      font-size: 34px;
+      margin: 0 0 12px;
+      line-height: 1.1;
+      max-width: calc(100% - 60px);
+    }
+
+    .modal-subinfo {
+      color: #c8c8c8;
+      font-size: 16px;
+      margin-bottom: 18px;
+    }
+
+    .modal-special {
+      margin: 18px 0 20px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .modal-special strong {
+      color: white;
+    }
+
+    .modal-price {
+      font-size: 18px;
+      font-weight: bold;
+      color: #f3f3f3;
+      margin-bottom: 22px;
+    }
+
+    .modal-stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      padding: 14px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #aaa;
+      padding: 40px 20px;
+      font-size: 18px;
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 850px) {
+      .modal-box {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-image-wrap {
+        min-height: 320px;
+        max-height: 420px;
+      }
+
+      .modal-title {
+        font-size: 28px;
+      }
+
+      .modal-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      h1 {
+        font-size: 30px;
+      }
+
+      .card img {
+        height: 280px;
+      }
+
+      .modal-info {
+        padding: 20px;
+      }
+
+      .modal-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-title {
+        font-size: 24px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -148,875 +386,963 @@
 
   <div class="grid" id="cardGrid"></div>
 
+  <!-- MODAL -->
+  <div class="modal" id="cardModal">
+    <div class="modal-box" id="modalBox">
+      <div class="modal-image-wrap">
+        <img id="modalImage" src="" alt="">
+      </div>
+      <div class="modal-info">
+        <button class="close-btn" id="closeModalBtn">×</button>
+        <div class="modal-rarity" id="modalRarity"></div>
+        <h2 class="modal-title" id="modalName"></h2>
+        <div class="modal-subinfo">Carte personnage • Booster Pack RP</div>
+
+        <div class="modal-special">
+          <strong>Capacité spéciale :</strong>
+          <div id="modalSpecialText"></div>
+        </div>
+
+        <div class="modal-price" id="modalPrice"></div>
+
+        <div class="modal-stats">
+          <div class="stat-box">
+            <div class="stat-label">Intelligence</div>
+            <div class="stat-value" id="modalIntelligence"></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Force</div>
+            <div class="stat-value" id="modalForce"></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Danger</div>
+            <div class="stat-value" id="modalDanger"></div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Charisme</div>
+            <div class="stat-value" id="modalCharisme"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const cards = [
       {
-name: "Franklin 'FB' Buckley",
-image: "images/Capture d'écran 2026-03-17 124137.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 74,
-force: 81,
-danger: 83,
-charisme: 76,
-special: "Malistrip"
-},
+        name: "Franklin 'FB' Buckley",
+        image: "images/Capture d'écran 2026-03-17 124137.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 74,
+        force: 81,
+        danger: 83,
+        charisme: 76,
+        special: "Malistrip"
+      },
 
-{
-name: "Alvaro Cardinas",
-image: "images/Capture d'écran 2026-03-14 170717.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 69,
-force: 86,
-danger: 80,
-charisme: 65,
-special: "Bagarreur loyal"
-},
+      {
+        name: "Alvaro Cardinas",
+        image: "images/Capture d'écran 2026-03-14 170717.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 69,
+        force: 86,
+        danger: 80,
+        charisme: 65,
+        special: "Bagarreur loyal"
+      },
 
-{
-name: "Aurmelya Haldorsen",
-image: "images/Capture d'écran 2026-03-14 171602.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 82,
-force: 66,
-danger: 73,
-charisme: 88,
-special: "Addiction aux défis"
-},
+      {
+        name: "Aurmelya Haldorsen",
+        image: "images/Capture d'écran 2026-03-14 171602.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 82,
+        force: 66,
+        danger: 73,
+        charisme: 88,
+        special: "Addiction aux défis"
+      },
 
-{
-name: "Chavo",
-image: "images/Capture d'écran 2026-03-17 124041 - Copie.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 86,
-force: 68,
-danger: 79,
-charisme: 71,
-special: "Chimiste hors pair"
-},
+      {
+        name: "Chavo",
+        image: "images/Capture d'écran 2026-03-17 124041 - Copie.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 86,
+        force: 68,
+        danger: 79,
+        charisme: 71,
+        special: "Chimiste hors pair"
+      },
 
-{
-name: "Cole McGarrett",
-image: "images/Capture d'écran 2026-03-17 124051 - Copie.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 83,
-force: 84,
-danger: 87,
-charisme: 70,
-special: "Traqueur Most Wanted"
-},
+      {
+        name: "Cole McGarrett",
+        image: "images/Capture d'écran 2026-03-17 124051 - Copie.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 83,
+        force: 84,
+        danger: 87,
+        charisme: 70,
+        special: "Traqueur Most Wanted"
+      },
 
-{
-name: "DK",
-image: "images/Capture d'écran 2026-03-17 124104 - Copie.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 75,
-force: 69,
-danger: 72,
-charisme: 81,
-special: "Flash du Hood"
-},
+      {
+        name: "DK",
+        image: "images/Capture d'écran 2026-03-17 124104 - Copie.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 75,
+        force: 69,
+        danger: 72,
+        charisme: 81,
+        special: "Flash du Hood"
+      },
 
-{
-name: "Elliot Wilson",
-image: "images/Capture d'écran 2026-03-17 124110 - Copie.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 80,
-force: 77,
-danger: 82,
-charisme: 68,
-special: "Matricule 48"
-},
+      {
+        name: "Elliot Wilson",
+        image: "images/Capture d'écran 2026-03-17 124110 - Copie.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 80,
+        force: 77,
+        danger: 82,
+        charisme: 68,
+        special: "Matricule 48"
+      },
 
-{
-name: "Ethan Shaws",
-image: "images/Capture d'écran 2026-03-17 124129.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 74,
-force: 72,
-danger: 69,
-charisme: 83,
-special: "Calme stratégique"
-},
+      {
+        name: "Ethan Shaws",
+        image: "images/Capture d'écran 2026-03-17 124129.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 74,
+        force: 72,
+        danger: 69,
+        charisme: 83,
+        special: "Calme stratégique"
+      },
 
-{
-name: "Dim Kleein",
-image: "images/Capture d'écran 2026-03-17 124056 - Copie.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 77,
-force: 74,
-danger: 76,
-charisme: 79,
-special: "Relation Benny's"
-},
-{
-name: "Kahel Brooks",
-image: "images/Capture d'écran 2026-03-17 124354.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 70,
-force: 86,
-danger: 83,
-charisme: 72,
-special: "Mauvais bagarreur"
-},
+      {
+        name: "Dim Kleein",
+        image: "images/Capture d'écran 2026-03-17 124056 - Copie.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 77,
+        force: 74,
+        danger: 76,
+        charisme: 79,
+        special: "Relation Benny's"
+      },
 
-{
-name: "Logan Hayes",
-image: "images/Capture d'écran 2026-03-17 124406.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 82,
-force: 74,
-danger: 76,
-charisme: 71,
-special: "Justice froide"
-},
+      {
+        name: "Kahel Brooks",
+        image: "images/Capture d'écran 2026-03-17 124354.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 70,
+        force: 86,
+        danger: 83,
+        charisme: 72,
+        special: "Mauvais bagarreur"
+      },
 
-{
-name: "Markus 'Shorty' Kelly",
-image: "images/Capture d'écran 2026-03-17 124412.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 73,
-force: 85,
-danger: 88,
-charisme: 69,
-special: "Tentative fatale"
-},
+      {
+        name: "Logan Hayes",
+        image: "images/Capture d'écran 2026-03-17 124406.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 82,
+        force: 74,
+        danger: 76,
+        charisme: 71,
+        special: "Justice froide"
+      },
 
-{
-name: "Mascotte",
-image: "images/Capture d'écran 2026-03-17 124420.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 64,
-force: 60,
-danger: 58,
-charisme: 90,
-special: "La vachette"
-},
+      {
+        name: "Markus 'Shorty' Kelly",
+        image: "images/Capture d'écran 2026-03-17 124412.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 73,
+        force: 85,
+        danger: 88,
+        charisme: 69,
+        special: "Tentative fatale"
+      },
 
-{
-name: "Flako Sinetavarez",
-image: "images/Capture d'écran 2026-03-17 124144.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 78,
-force: 81,
-danger: 84,
-charisme: 76,
-special: "Vice-président dangereux"
-},
+      {
+        name: "Mascotte",
+        image: "images/Capture d'écran 2026-03-17 124420.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 64,
+        force: 60,
+        danger: 58,
+        charisme: 90,
+        special: "La vachette"
+      },
 
-{
-name: "Ghost 'Pookie'",
-image: "images/Capture d'écran 2026-03-17 124149.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 84,
-force: 75,
-danger: 86,
-charisme: 90,
-special: "Manipulation de rue"
-},
+      {
+        name: "Flako Sinetavarez",
+        image: "images/Capture d'écran 2026-03-17 124144.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 78,
+        force: 81,
+        danger: 84,
+        charisme: 76,
+        special: "Vice-président dangereux"
+      },
 
-{
-name: "Hector Castillo",
-image: "images/Capture d'écran 2026-03-17 124201.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 72,
-force: 84,
-danger: 87,
-charisme: 70,
-special: "Fou du bus"
-},
+      {
+        name: "Ghost 'Pookie'",
+        image: "images/Capture d'écran 2026-03-17 124149.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 84,
+        force: 75,
+        danger: 86,
+        charisme: 90,
+        special: "Manipulation de rue"
+      },
 
-{
-name: "Hector Trevino",
-image: "images/Capture d'écran 2026-03-17 124207 - Copie.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 81,
-force: 69,
-danger: 74,
-charisme: 88,
-special: "Rap sans limite"
-},
+      {
+        name: "Hector Castillo",
+        image: "images/Capture d'écran 2026-03-17 124201.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 72,
+        force: 84,
+        danger: 87,
+        charisme: 70,
+        special: "Fou du bus"
+      },
 
-{
-name: "Hezekiel Huotari",
-image: "images/Capture d'écran 2026-03-17 124215.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 77,
-force: 83,
-danger: 86,
-charisme: 67,
-special: "Tue sur ordre"
-},
+      {
+        name: "Hector Trevino",
+        image: "images/Capture d'écran 2026-03-17 124207 - Copie.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 81,
+        force: 69,
+        danger: 74,
+        charisme: 88,
+        special: "Rap sans limite"
+      },
 
-{
-name: "Harvey Freeman",
-image: "images/Capture d'écran 2026-03-17 124222.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 88,
-force: 65,
-danger: 72,
-charisme: 90,
-special: "Patron respecté"
-},
+      {
+        name: "Hezekiel Huotari",
+        image: "images/Capture d'écran 2026-03-17 124215.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 77,
+        force: 83,
+        danger: 86,
+        charisme: 67,
+        special: "Tue sur ordre"
+      },
 
-{
-name: "Kayla",
-image: "images/Capture d'écran 2026-03-17 124342.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 71,
-force: 66,
-danger: 69,
-charisme: 92,
-special: "Folie attachante"
-},
+      {
+        name: "Harvey Freeman",
+        image: "images/Capture d'écran 2026-03-17 124222.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 88,
+        force: 65,
+        danger: 72,
+        charisme: 90,
+        special: "Patron respecté"
+      },
 
-{
-name: "Keith Ross",
-image: "images/Capture d'écran 2026-03-17 124349.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 76,
-force: 74,
-danger: 78,
-charisme: 87,
-special: "Overtown clique"
-},
+      {
+        name: "Kayla",
+        image: "images/Capture d'écran 2026-03-17 124342.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 71,
+        force: 66,
+        danger: 69,
+        charisme: 92,
+        special: "Folie attachante"
+      },
 
-{
-name: "Lewis",
-image: "images/Capture d'écran 2026-03-17 124401.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 70,
-force: 86,
-danger: 88,
-charisme: 67,
-special: "Bagarreur sanglant"
-},{
-name: "Jimmy Crawford",
-image: "images/Capture d'écran 2026-03-17 124241.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 79,
-force: 70,
-danger: 72,
-charisme: 88,
-special: "Influenceur du vice"
-},
+      {
+        name: "Keith Ross",
+        image: "images/Capture d'écran 2026-03-17 124349.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 76,
+        force: 74,
+        danger: 78,
+        charisme: 87,
+        special: "Overtown clique"
+      },
 
-{
-name: "Jamall",
-image: "images/Capture d'écran 2026-03-17 124247.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 74,
-force: 82,
-danger: 85,
-charisme: 76,
-special: "La foudre SMM"
-},
+      {
+        name: "Lewis",
+        image: "images/Capture d'écran 2026-03-17 124401.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 70,
+        force: 86,
+        danger: 88,
+        charisme: 67,
+        special: "Bagarreur sanglant"
+      },
 
-{
-name: "Joseph Chpéko",
-image: "images/Capture d'écran 2026-03-17 124252.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 81,
-force: 78,
-danger: 75,
-charisme: 73,
-special: "Autorité des Devils"
-},
+      {
+        name: "Jimmy Crawford",
+        image: "images/Capture d'écran 2026-03-17 124241.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 79,
+        force: 70,
+        danger: 72,
+        charisme: 88,
+        special: "Influenceur du vice"
+      },
 
-{
-name: "Jackson Brown",
-image: "images/Capture d'écran 2026-03-17 124305.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 70,
-force: 86,
-danger: 87,
-charisme: 68,
-special: "Cavale infernale"
-},
+      {
+        name: "Jamall",
+        image: "images/Capture d'écran 2026-03-17 124247.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 74,
+        force: 82,
+        danger: 85,
+        charisme: 76,
+        special: "La foudre SMM"
+      },
 
-{
-name: "Kenneth St-John",
-image: "images/Capture d'écran 2026-03-17 124316.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 73,
-force: 84,
-danger: 82,
-charisme: 71,
-special: "Vice-duc des gueux"
-},
+      {
+        name: "Joseph Chpéko",
+        image: "images/Capture d'écran 2026-03-17 124252.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 81,
+        force: 78,
+        danger: 75,
+        charisme: 73,
+        special: "Autorité des Devils"
+      },
 
-{
-name: "Kayz Kush",
-image: "images/Capture d'écran 2026-03-17 124320.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 77,
-force: 83,
-danger: 85,
-charisme: 69,
-special: "Balboa dans les veines"
-},
+      {
+        name: "Jackson Brown",
+        image: "images/Capture d'écran 2026-03-17 124305.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 70,
+        force: 86,
+        danger: 87,
+        charisme: 68,
+        special: "Cavale infernale"
+      },
 
-{
-name: "Isaac Griffin",
-image: "images/Capture d'écran 2026-03-17 124230.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 80,
-force: 72,
-danger: 74,
-charisme: 84,
-special: "Hangover Repair"
-},
+      {
+        name: "Kenneth St-John",
+        image: "images/Capture d'écran 2026-03-17 124316.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 73,
+        force: 84,
+        danger: 82,
+        charisme: 71,
+        special: "Vice-duc des gueux"
+      },
 
-{
-name: "James Barrows",
-image: "images/Capture d'écran 2026-03-17 124235.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 82,
-force: 74,
-danger: 70,
-charisme: 76,
-special: "Directeur de Bolingbroke"
-},{
-name: "Rust",
-image: "images/Capture d'écran 2026-03-14 190926.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 88,
-force: 73,
-danger: 80,
-charisme: 69,
-special: "Maître des chiffres"
-},
+      {
+        name: "Kayz Kush",
+        image: "images/Capture d'écran 2026-03-17 124320.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 77,
+        force: 83,
+        danger: 85,
+        charisme: 69,
+        special: "Balboa dans les veines"
+      },
 
-{
-name: "Riley Barrows",
-image: "images/Capture d'écran 2026-03-14 190934.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 82,
-force: 70,
-danger: 72,
-charisme: 84,
-special: "Gros caractère"
-},
+      {
+        name: "Isaac Griffin",
+        image: "images/Capture d'écran 2026-03-17 124230.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 80,
+        force: 72,
+        danger: 74,
+        charisme: 84,
+        special: "Hangover Repair"
+      },
 
-{
-name: "Raven Carter",
-image: "images/Capture d'écran 2026-03-14 190941.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 86,
-force: 64,
-danger: 68,
-charisme: 83,
-special: "Femme d'affaire froide"
-},
+      {
+        name: "James Barrows",
+        image: "images/Capture d'écran 2026-03-17 124235.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 82,
+        force: 74,
+        danger: 70,
+        charisme: 76,
+        special: "Directeur de Bolingbroke"
+      },
 
-{
-name: "Marco Santini",
-image: "images/Capture d'écran 2026-03-17 124427.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 77,
-force: 79,
-danger: 81,
-charisme: 71,
-special: "Ancien Devil 1%"
-},
+      {
+        name: "Rust",
+        image: "images/Capture d'écran 2026-03-14 190926.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 88,
+        force: 73,
+        danger: 80,
+        charisme: 69,
+        special: "Maître des chiffres"
+      },
 
-{
-name: "Marcus West",
-image: "images/Capture d'écran 2026-03-14 180855.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 80,
-force: 78,
-danger: 76,
-charisme: 70,
-special: "Mary SAST"
-},
+      {
+        name: "Riley Barrows",
+        image: "images/Capture d'écran 2026-03-14 190934.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 82,
+        force: 70,
+        danger: 72,
+        charisme: 84,
+        special: "Gros caractère"
+      },
 
-{
-name: "Neli",
-image: "images/Capture d'écran 2026-03-14 180902.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 74,
-force: 65,
-danger: 70,
-charisme: 92,
-special: "Double face"
-},
+      {
+        name: "Raven Carter",
+        image: "images/Capture d'écran 2026-03-14 190941.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 86,
+        force: 64,
+        danger: 68,
+        charisme: 83,
+        special: "Femme d'affaire froide"
+      },
 
-{
-name: "Noeliax",
-image: "images/Capture d'écran 2026-03-14 180907.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 81,
-force: 69,
-danger: 72,
-charisme: 78,
-special: "Rookie 102"
-},
+      {
+        name: "Marco Santini",
+        image: "images/Capture d'écran 2026-03-17 124427.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 77,
+        force: 79,
+        danger: 81,
+        charisme: 71,
+        special: "Ancien Devil 1%"
+      },
 
-{
-name: "Kody Hall",
-image: "images/Capture d'écran 2026-03-17 124332.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 76,
-force: 71,
-danger: 75,
-charisme: 89,
-special: "Organisateur d'événements"
-},{
-name: "Sweeney",
-image: "images/Capture d'écran 2026-03-14 192423.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 82,
-force: 66,
-danger: 68,
-charisme: 91,
-special: "Miss Los Santos"
-},
+      {
+        name: "Marcus West",
+        image: "images/Capture d'écran 2026-03-14 180855.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 80,
+        force: 78,
+        danger: 76,
+        charisme: 70,
+        special: "Mary SAST"
+      },
 
-{
-name: "Sime et Coca",
-image: "images/Capture d'écran 2026-03-14 193110.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 74,
-force: 83,
-danger: 86,
-charisme: 78,
-special: "Rois du territoire"
-},
+      {
+        name: "Neli",
+        image: "images/Capture d'écran 2026-03-14 180902.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 74,
+        force: 65,
+        danger: 70,
+        charisme: 92,
+        special: "Double face"
+      },
 
-{
-name: "Smoke",
-image: "images/Capture d'écran 2026-03-14 193129.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 71,
-force: 80,
-danger: 88,
-charisme: 67,
-special: "Gang SMM"
-},
+      {
+        name: "Noeliax",
+        image: "images/Capture d'écran 2026-03-14 180907.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 81,
+        force: 69,
+        danger: 72,
+        charisme: 78,
+        special: "Rookie 102"
+      },
 
-{
-name: "Sombra",
-image: "images/Capture d'écran 2026-03-14 193158.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 83,
-force: 69,
-danger: 72,
-charisme: 86,
-special: "Chanteuse des ombres"
-},
+      {
+        name: "Kody Hall",
+        image: "images/Capture d'écran 2026-03-17 124332.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 76,
+        force: 71,
+        danger: 75,
+        charisme: 89,
+        special: "Organisateur d'événements"
+      },
 
-{
-name: "Switcher",
-image: "images/Capture d'écran 2026-03-14 193536.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 78,
-force: 74,
-danger: 79,
-charisme: 84,
-special: "Rappeur disque d'or"
-},
+      {
+        name: "Sweeney",
+        image: "images/Capture d'écran 2026-03-14 192423.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 82,
+        force: 66,
+        danger: 68,
+        charisme: 91,
+        special: "Miss Los Santos"
+      },
 
-{
-name: "Rey Brooks",
-image: "images/Capture d'écran 2026-03-14 192313.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 81,
-force: 68,
-danger: 71,
-charisme: 88,
-special: "Protectrice"
-},
+      {
+        name: "Sime et Coca",
+        image: "images/Capture d'écran 2026-03-14 193110.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 74,
+        force: 83,
+        danger: 86,
+        charisme: 78,
+        special: "Rois du territoire"
+      },
 
-{
-name: "Rubio",
-image: "images/Capture d'écran 2026-03-14 192320.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 79,
-force: 84,
-danger: 87,
-charisme: 73,
-special: "Most Wanted"
-},
+      {
+        name: "Smoke",
+        image: "images/Capture d'écran 2026-03-14 193129.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 71,
+        force: 80,
+        danger: 88,
+        charisme: 67,
+        special: "Gang SMM"
+      },
 
-{
-name: "Silvio Castellianos",
-image: "images/Capture d'écran 2026-03-14 192327.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 72,
-force: 77,
-danger: 82,
-charisme: 80,
-special: "Fou tropical"
-},{
-name: "Umbra",
-image: "images/Capture d'écran 2026-03-14 194636.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 82,
-force: 68,
-danger: 74,
-charisme: 86,
-special: "Black Wolf Family"
-},
+      {
+        name: "Sombra",
+        image: "images/Capture d'écran 2026-03-14 193158.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 83,
+        force: 69,
+        danger: 72,
+        charisme: 86,
+        special: "Chanteuse des ombres"
+      },
 
-{
-name: "Warren Hope",
-image: "images/Capture d'écran 2026-03-14 194652.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 83,
-force: 79,
-danger: 81,
-charisme: 84,
-special: "Sang-froid SAST"
-},
+      {
+        name: "Switcher",
+        image: "images/Capture d'écran 2026-03-14 193536.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 78,
+        force: 74,
+        danger: 79,
+        charisme: 84,
+        special: "Rappeur disque d'or"
+      },
 
-{
-name: "Yang Wu",
-image: "images/Capture d'écran 2026-03-14 194700.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 88,
-force: 82,
-danger: 85,
-charisme: 78,
-special: "Fureur du dragon"
-},
+      {
+        name: "Rey Brooks",
+        image: "images/Capture d'écran 2026-03-14 192313.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 81,
+        force: 68,
+        danger: 71,
+        charisme: 88,
+        special: "Protectrice"
+      },
 
-{
-name: "Zikzee Tabar",
-image: "images/Capture d'écran 2026-03-14 195134.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 70,
-force: 84,
-danger: 88,
-charisme: 79,
-special: "Folie de hooligan"
-},
+      {
+        name: "Rubio",
+        image: "images/Capture d'écran 2026-03-14 192320.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 79,
+        force: 84,
+        danger: 87,
+        charisme: 73,
+        special: "Most Wanted"
+      },
 
-{
-name: "Sergo Exandus",
-image: "images/Capture d'écran 2026-03-14 193544.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 85,
-force: 83,
-danger: 91,
-charisme: 74,
-special: "Exécution froide"
-},
+      {
+        name: "Silvio Castellianos",
+        image: "images/Capture d'écran 2026-03-14 192327.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 72,
+        force: 77,
+        danger: 82,
+        charisme: 80,
+        special: "Fou tropical"
+      },
 
-{
-name: "Tao Vato",
-image: "images/Capture d'écran 2026-03-14 193550.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 86,
-force: 84,
-danger: 88,
-charisme: 90,
-special: "Leadership MC"
-},
+      {
+        name: "Umbra",
+        image: "images/Capture d'écran 2026-03-14 194636.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 82,
+        force: 68,
+        danger: 74,
+        charisme: 86,
+        special: "Black Wolf Family"
+      },
 
-{
-name: "TekeuR Hall",
-image: "images/Capture d'écran 2026-03-14 194626.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 86,
-force: 80,
-danger: 88,
-charisme: 76,
-special: "Manipulation furtive"
-},
+      {
+        name: "Warren Hope",
+        image: "images/Capture d'écran 2026-03-14 194652.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 83,
+        force: 79,
+        danger: 81,
+        charisme: 84,
+        special: "Sang-froid SAST"
+      },
 
-{
-name: "Wesley Jones",
-image: "images/Capture d'écran 2026-03-14 194645.png",
-rarity: "rare",
-displayRarity: "Rare",
-price: "1500$",
-intelligence: 70,
-force: 85,
-danger: 91,
-charisme: 72,
-special: "Rage du 46"
-},{
-name: "Yoro Shin",
-image: "images/Capture d'écran 2026-03-14 195108.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 95,
-force: 82,
-danger: 94,
-charisme: 90,
-special: "Empereur de l'Ombre"
-},
+      {
+        name: "Yang Wu",
+        image: "images/Capture d'écran 2026-03-14 194700.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 88,
+        force: 82,
+        danger: 85,
+        charisme: 78,
+        special: "Fureur du dragon"
+      },
 
-{
-name: "Zayra Cifuentes",
-image: "images/Capture d'écran 2026-03-14 195122.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 89,
-force: 76,
-danger: 84,
-charisme: 92,
-special: "Négociation Venimeuse"
-},
+      {
+        name: "Zikzee Tabar",
+        image: "images/Capture d'écran 2026-03-14 195134.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 70,
+        force: 84,
+        danger: 88,
+        charisme: 79,
+        special: "Folie de hooligan"
+      },
 
-{
-name: "Aitoarii Teikitohe",
-image: "images/Capture d'écran 2026-03-17 124030.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 88,
-force: 90,
-danger: 92,
-charisme: 84,
-special: "King of Knuckle Duster"
-},
+      {
+        name: "Sergo Exandus",
+        image: "images/Capture d'écran 2026-03-14 193544.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 85,
+        force: 83,
+        danger: 91,
+        charisme: 74,
+        special: "Exécution froide"
+      },
 
-{
-name: "Albert Bentata",
-image: "images/Capture d'écran 2026-03-14 170353.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 96,
-force: 55,
-danger: 60,
-charisme: 88,
-special: "Démêrdard Juridique"
-},
+      {
+        name: "Tao Vato",
+        image: "images/Capture d'écran 2026-03-14 193550.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 86,
+        force: 84,
+        danger: 88,
+        charisme: 90,
+        special: "Leadership MC"
+      },
 
-{
-name: "Alejandro Peña 'Ruta'",
-image: "images/Capture d'écran 2026-03-14 170516 - Copie.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 86,
-force: 74,
-danger: 82,
-charisme: 88,
-special: "Homme de la Route"
-},
+      {
+        name: "TekeuR Hall",
+        image: "images/Capture d'écran 2026-03-14 194626.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 86,
+        force: 80,
+        danger: 88,
+        charisme: 76,
+        special: "Manipulation furtive"
+      },
 
-{
-name: "Elarrya Campos",
-image: "images/Capture d'écran 2026-03-17 124117 - Copie.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 94,
-force: 62,
-danger: 55,
-charisme: 91,
-special: "Miracle Médical"
-},
+      {
+        name: "Wesley Jones",
+        image: "images/Capture d'écran 2026-03-14 194645.png",
+        rarity: "rare",
+        displayRarity: "Rare",
+        price: "1500$",
+        intelligence: 70,
+        force: 85,
+        danger: 91,
+        charisme: 72,
+        special: "Rage du 46"
+      },
 
-{
-name: "Elio 'Mani' Clark",
-image: "images/Capture d'écran 2026-03-17 124123.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 91,
-force: 60,
-danger: 86,
-charisme: 78,
-special: "Hacker de Haut Niveau"
-},
+      {
+        name: "Yoro Shin",
+        image: "images/Capture d'écran 2026-03-14 195108.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 95,
+        force: 82,
+        danger: 94,
+        charisme: 90,
+        special: "Empereur de l'Ombre"
+      },
 
-{
-name: "Tonton Kalile",
-image: "images/Capture d'écran 2026-03-17 124326.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 90,
-force: 84,
-danger: 82,
-charisme: 86,
-special: "Discipline Militaire"
-},
+      {
+        name: "Zayra Cifuentes",
+        image: "images/Capture d'écran 2026-03-14 195122.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 89,
+        force: 76,
+        danger: 84,
+        charisme: 92,
+        special: "Négociation Venimeuse"
+      },
 
-{
-name: "Penfield Cody",
-image: "images/Capture d'écran 2026-03-14 190635.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 88,
-force: 79,
-danger: 94,
-charisme: 86,
-special: "Cerveau de Braquage"
-},
+      {
+        name: "Aitoarii Teikitohe",
+        image: "images/Capture d'écran 2026-03-17 124030.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 88,
+        force: 90,
+        danger: 92,
+        charisme: 84,
+        special: "King of Knuckle Duster"
+      },
 
-{
-name: "Pierce Logan",
-image: "images/Capture d'écran 2026-03-14 190700.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 82,
-force: 72,
-danger: 70,
-charisme: 95,
-special: "Vibes Positives"
-},
+      {
+        name: "Albert Bentata",
+        image: "images/Capture d'écran 2026-03-14 170353.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 96,
+        force: 55,
+        danger: 60,
+        charisme: 88,
+        special: "Démêrdard Juridique"
+      },
 
-{
-name: "Renato Nascimento",
-image: "images/Capture d'écran 2026-03-14 192250.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 95,
-force: 66,
-danger: 78,
-charisme: 92,
-special: "Plaidoirie Foudroyante"
-},
+      {
+        name: "Alejandro Peña 'Ruta'",
+        image: "images/Capture d'écran 2026-03-14 170516 - Copie.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 86,
+        force: 74,
+        danger: 82,
+        charisme: 88,
+        special: "Homme de la Route"
+      },
 
-{
-name: "T-Rock",
-image: "images/Capture d'écran 2026-03-14 194344.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 87,
-force: 78,
-danger: 89,
-charisme: 84,
-special: "Maître Tatoueur"
-},
+      {
+        name: "Elarrya Campos",
+        image: "images/Capture d'écran 2026-03-17 124117 - Copie.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 94,
+        force: 62,
+        danger: 55,
+        charisme: 91,
+        special: "Miracle Médical"
+      },
 
-{
-name: "Sha'Quille Hill",
-image: "images/Capture d'écran 2026-03-14 193148.png",
-rarity: "epique",
-displayRarity: "Épique",
-price: "3500$",
-intelligence: 83,
-force: 91,
-danger: 93,
-charisme: 87,
-special: "Respect de la Rue"
-},
-];
-  
+      {
+        name: "Elio 'Mani' Clark",
+        image: "images/Capture d'écran 2026-03-17 124123.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 91,
+        force: 60,
+        danger: 86,
+        charisme: 78,
+        special: "Hacker de Haut Niveau"
+      },
+
+      {
+        name: "Tonton Kalile",
+        image: "images/Capture d'écran 2026-03-17 124326.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 90,
+        force: 84,
+        danger: 82,
+        charisme: 86,
+        special: "Discipline Militaire"
+      },
+
+      {
+        name: "Penfield Cody",
+        image: "images/Capture d'écran 2026-03-14 190635.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 88,
+        force: 79,
+        danger: 94,
+        charisme: 86,
+        special: "Cerveau de Braquage"
+      },
+
+      {
+        name: "Pierce Logan",
+        image: "images/Capture d'écran 2026-03-14 190700.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 82,
+        force: 72,
+        danger: 70,
+        charisme: 95,
+        special: "Vibes Positives"
+      },
+
+      {
+        name: "Renato Nascimento",
+        image: "images/Capture d'écran 2026-03-14 192250.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 95,
+        force: 66,
+        danger: 78,
+        charisme: 92,
+        special: "Plaidoirie Foudroyante"
+      },
+
+      {
+        name: "T-Rock",
+        image: "images/Capture d'écran 2026-03-14 194344.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 87,
+        force: 78,
+        danger: 89,
+        charisme: 84,
+        special: "Maître Tatoueur"
+      },
+
+      {
+        name: "Sha'Quille Hill",
+        image: "images/Capture d'écran 2026-03-14 193148.png",
+        rarity: "epique",
+        displayRarity: "Épique",
+        price: "3500$",
+        intelligence: 83,
+        force: 91,
+        danger: 93,
+        charisme: 87,
+        special: "Respect de la Rue"
+      },
+    ];
+
     const grid = document.getElementById("cardGrid");
     const search = document.getElementById("search");
     const filter = document.getElementById("filter");
 
+    const modal = document.getElementById("cardModal");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const modalImage = document.getElementById("modalImage");
+    const modalName = document.getElementById("modalName");
+    const modalRarity = document.getElementById("modalRarity");
+    const modalSpecialText = document.getElementById("modalSpecialText");
+    const modalPrice = document.getElementById("modalPrice");
+    const modalIntelligence = document.getElementById("modalIntelligence");
+    const modalForce = document.getElementById("modalForce");
+    const modalDanger = document.getElementById("modalDanger");
+    const modalCharisme = document.getElementById("modalCharisme");
+
+    function openModal(card) {
+      modalImage.src = card.image;
+      modalImage.alt = card.name;
+      modalName.textContent = card.name;
+
+      modalRarity.textContent = card.displayRarity;
+      modalRarity.className = `modal-rarity ${card.rarity}`;
+
+      modalSpecialText.textContent = card.special;
+      modalPrice.textContent = `💰 Valeur : ${card.price}`;
+      modalIntelligence.textContent = card.intelligence;
+      modalForce.textContent = card.force;
+      modalDanger.textContent = card.danger;
+      modalCharisme.textContent = card.charisme;
+
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+
     function renderCards() {
-      const searchValue = search.value.toLowerCase();
+      const searchValue = search.value.toLowerCase().trim();
       const filterValue = filter.value;
 
       const filteredCards = cards.filter(card => {
@@ -1026,6 +1352,11 @@ special: "Respect de la Rue"
       });
 
       grid.innerHTML = "";
+
+      if (filteredCards.length === 0) {
+        grid.innerHTML = `<div class="empty-state">Aucune carte trouvée.</div>`;
+        return;
+      }
 
       filteredCards.forEach(card => {
         const div = document.createElement("div");
@@ -1045,12 +1376,28 @@ special: "Respect de la Rue"
             <div class="price">💰 ${card.price}</div>
           </div>
         `;
+
+        div.addEventListener("click", () => openModal(card));
         grid.appendChild(div);
       });
     }
 
     search.addEventListener("input", renderCards);
     filter.addEventListener("change", renderCards);
+
+    closeModalBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("active")) {
+        closeModal();
+      }
+    });
 
     renderCards();
   </script>
