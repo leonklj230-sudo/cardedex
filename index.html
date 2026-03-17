@@ -7,13 +7,27 @@
   <style>
     * { box-sizing: border-box; }
 
+    :root {
+      --bg-1: #060606;
+      --bg-2: #101010;
+      --panel: rgba(255,255,255,0.05);
+      --panel-2: rgba(255,255,255,0.08);
+      --text-soft: #cfcfcf;
+      --border: rgba(255,255,255,0.08);
+      --blue: #2563eb;
+      --red: #dc2626;
+      --gold: #f59e0b;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background:
-        radial-gradient(circle at top, rgba(255,255,255,0.05), transparent 30%),
-        linear-gradient(180deg, #0b0b0b 0%, #070707 100%);
+        radial-gradient(circle at top, rgba(255,255,255,0.06), transparent 28%),
+        radial-gradient(circle at bottom, rgba(59,130,246,0.08), transparent 25%),
+        linear-gradient(180deg, var(--bg-2), var(--bg-1));
       color: white;
+      min-height: 100vh;
     }
 
     header {
@@ -23,9 +37,9 @@
 
     h1 {
       margin: 0 0 20px;
-      font-size: 40px;
+      font-size: 42px;
       letter-spacing: 1px;
-      text-shadow: 0 0 18px rgba(255,255,255,0.08);
+      text-shadow: 0 0 25px rgba(255,255,255,0.08);
     }
 
     .topbar {
@@ -33,14 +47,14 @@
       gap: 12px;
       justify-content: center;
       flex-wrap: wrap;
-      padding: 0 20px 20px;
+      padding: 0 20px 10px;
     }
 
-    input, select {
+    input, select, button {
       padding: 12px 14px;
       border-radius: 12px;
-      border: 1px solid #2b2b2b;
-      background: #161616;
+      border: 1px solid #2e2e2e;
+      background: #171717;
       color: white;
       min-width: 220px;
       outline: none;
@@ -48,35 +62,94 @@
     }
 
     input:focus, select:focus {
-      border-color: #666;
+      border-color: #555;
       box-shadow: 0 0 0 3px rgba(255,255,255,0.05);
+    }
+
+    .booster-btn {
+      min-width: auto;
+      cursor: pointer;
+      font-weight: bold;
+      background: linear-gradient(135deg, #1f2937, #111827);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+    }
+
+    .booster-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.35);
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
+      gap: 22px;
       padding: 20px;
-      max-width: 1400px;
+      max-width: 1450px;
       margin: auto;
     }
 
     .card {
-      background: linear-gradient(180deg, #161616 0%, #101010 100%);
-      border-radius: 18px;
-      overflow: hidden;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-      box-shadow: 0 0 0 1px #222, 0 10px 25px rgba(0,0,0,0.25);
-      cursor: pointer;
       position: relative;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)),
+        linear-gradient(180deg, #151515 0%, #0d0d0d 100%);
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 0 0 0 1px #222, 0 14px 30px rgba(0,0,0,0.28);
+      isolation: isolate;
     }
 
     .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 0 0 1px #333, 0 18px 35px rgba(0,0,0,0.38);
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 0 0 1px #333, 0 22px 35px rgba(0,0,0,0.42);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(120deg, transparent 15%, rgba(255,255,255,0.11) 35%, transparent 55%);
+      transform: translateX(-120%);
+      transition: transform 0.8s ease;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .card:hover::before {
+      transform: translateX(120%);
+    }
+
+    .card.holo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(125deg,
+          rgba(255,0,128,0.10) 0%,
+          rgba(0,204,255,0.10) 22%,
+          rgba(255,255,0,0.12) 45%,
+          rgba(0,255,128,0.10) 65%,
+          rgba(255,0,255,0.08) 100%);
+      mix-blend-mode: screen;
+      opacity: 0.7;
+      pointer-events: none;
+      z-index: 1;
+      animation: holoShift 6s linear infinite;
+    }
+
+    @keyframes holoShift {
+      0% { transform: translateX(-8%) translateY(0%) rotate(0deg); }
+      50% { transform: translateX(8%) translateY(-2%) rotate(1deg); }
+      100% { transform: translateX(-8%) translateY(0%) rotate(0deg); }
     }
 
     .card img {
+      position: relative;
+      z-index: 0;
       width: 100%;
       height: 320px;
       object-fit: cover;
@@ -85,18 +158,20 @@
     }
 
     .card-content {
+      position: relative;
+      z-index: 3;
       padding: 14px;
     }
 
     .card h3 {
       margin: 0 0 8px;
-      font-size: 22px;
+      font-size: 21px;
       line-height: 1.2;
     }
 
     .tag {
       display: inline-block;
-      padding: 6px 10px;
+      padding: 6px 11px;
       border-radius: 999px;
       font-size: 13px;
       font-weight: bold;
@@ -104,27 +179,23 @@
     }
 
     .rare {
-      border: 2px solid #1d4ed8;
-      box-shadow: 0 0 0 1px rgba(29, 78, 216, 0.15), 0 10px 25px rgba(0,0,0,0.25);
+      border: 2px solid var(--blue);
+      box-shadow: 0 0 0 1px rgba(37,99,235,0.12), 0 14px 30px rgba(0,0,0,0.28);
     }
-    .rare .tag {
-      background: #1d4ed8;
-    }
+    .rare .tag { background: var(--blue); }
 
     .epique {
-      border: 2px solid #dc2626;
-      box-shadow: 0 0 0 1px rgba(220, 38, 38, 0.15), 0 10px 25px rgba(0,0,0,0.25);
+      border: 2px solid var(--red);
+      box-shadow: 0 0 0 1px rgba(220,38,38,0.14), 0 14px 30px rgba(0,0,0,0.28);
     }
-    .epique .tag {
-      background: #dc2626;
-    }
+    .epique .tag { background: var(--red); }
 
     .legendaire {
-      border: 2px solid #f59e0b;
-      box-shadow: 0 0 0 1px rgba(245, 158, 11, 0.15), 0 10px 25px rgba(0,0,0,0.25);
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 0 1px rgba(245,158,11,0.18), 0 14px 30px rgba(0,0,0,0.28);
     }
     .legendaire .tag {
-      background: #f59e0b;
+      background: var(--gold);
       color: black;
     }
 
@@ -144,21 +215,37 @@
 
     .price {
       margin-top: 8px;
-      color: #aaa;
+      color: #bbb;
       font-size: 14px;
+    }
+
+    .click-hint {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #8f8f8f;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #aaa;
+      padding: 40px 20px;
+      font-size: 18px;
+      grid-column: 1 / -1;
     }
 
     /* MODAL */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.78);
-      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      z-index: 2000;
+      padding: 22px;
+      z-index: 3000;
     }
 
     .modal.active {
@@ -172,15 +259,18 @@
     }
 
     .modal-box {
-      width: min(100%, 1000px);
-      background: linear-gradient(180deg, #151515 0%, #0f0f0f 100%);
-      border-radius: 22px;
+      width: min(100%, 1120px);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02)),
+        linear-gradient(180deg, #141414, #0b0b0b);
+      border-radius: 26px;
       overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+      box-shadow: 0 22px 60px rgba(0,0,0,0.55);
       display: grid;
-      grid-template-columns: 380px 1fr;
-      border: 1px solid #2a2a2a;
+      grid-template-columns: 390px 1fr;
+      border: 1px solid var(--border);
       animation: popIn 0.2s ease;
+      position: relative;
     }
 
     @keyframes popIn {
@@ -194,9 +284,27 @@
       }
     }
 
+    .modal-box.holo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(130deg,
+          rgba(255,0,140,0.08) 0%,
+          rgba(0,191,255,0.09) 25%,
+          rgba(255,255,255,0.10) 45%,
+          rgba(255,220,0,0.08) 70%,
+          rgba(0,255,170,0.08) 100%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: holoShift 7s linear infinite;
+    }
+
     .modal-image-wrap {
-      background: #0f0f0f;
-      min-height: 540px;
+      position: relative;
+      background: #0c0c0c;
+      min-height: 580px;
+      border-right: 1px solid rgba(255,255,255,0.05);
     }
 
     .modal-image-wrap img {
@@ -207,8 +315,9 @@
     }
 
     .modal-info {
-      padding: 26px;
       position: relative;
+      padding: 28px;
+      z-index: 2;
     }
 
     .close-btn {
@@ -224,6 +333,8 @@
       font-size: 24px;
       cursor: pointer;
       transition: 0.2s ease;
+      min-width: auto;
+      padding: 0;
     }
 
     .close-btn:hover {
@@ -233,7 +344,7 @@
 
     .modal-rarity {
       display: inline-block;
-      padding: 7px 12px;
+      padding: 8px 13px;
       border-radius: 999px;
       font-size: 13px;
       font-weight: bold;
@@ -241,130 +352,347 @@
     }
 
     .modal-rarity.rare {
-      background: #1d4ed8;
+      background: var(--blue);
       border: none;
       color: white;
     }
 
     .modal-rarity.epique {
-      background: #dc2626;
+      background: var(--red);
       border: none;
       color: white;
     }
 
     .modal-rarity.legendaire {
-      background: #f59e0b;
+      background: var(--gold);
       border: none;
       color: black;
     }
 
     .modal-title {
-      font-size: 34px;
-      margin: 0 0 12px;
-      line-height: 1.1;
+      font-size: 36px;
+      margin: 0 0 8px;
+      line-height: 1.05;
       max-width: calc(100% - 60px);
+      text-shadow: 0 2px 18px rgba(255,255,255,0.06);
     }
 
     .modal-subinfo {
       color: #c8c8c8;
-      font-size: 16px;
+      font-size: 15px;
       margin-bottom: 18px;
     }
 
     .modal-special {
-      margin: 18px 0 20px;
-      padding: 14px 16px;
-      border-radius: 14px;
+      margin: 18px 0 18px;
+      padding: 16px;
+      border-radius: 16px;
       background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.07);
       font-size: 15px;
       line-height: 1.5;
-    }
-
-    .modal-special strong {
-      color: white;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
     }
 
     .modal-price {
-      font-size: 18px;
+      font-size: 19px;
       font-weight: bold;
-      color: #f3f3f3;
-      margin-bottom: 22px;
+      margin-bottom: 24px;
+      color: #f0f0f0;
     }
 
     .modal-stats {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+      gap: 14px;
     }
 
-    .stat-box {
+    .stat-row {
       background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 14px;
-      padding: 14px;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 14px 14px 12px;
     }
 
-    .stat-label {
-      font-size: 12px;
-      color: #aaa;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-    }
-
-    .stat-value {
-      font-size: 28px;
+    .stat-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
       font-weight: bold;
       color: white;
     }
 
-    .empty-state {
-      text-align: center;
-      color: #aaa;
-      padding: 40px 20px;
-      font-size: 18px;
-      grid-column: 1 / -1;
+    .stat-label {
+      color: #d5d5d5;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      font-size: 12px;
     }
 
-    @media (max-width: 850px) {
+    .stat-bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.35);
+    }
+
+    .stat-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      transition: width 0.7s ease;
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+    }
+
+    .stat-fill.force {
+      background: linear-gradient(90deg, #dc2626, #fb7185);
+    }
+
+    .stat-fill.danger {
+      background: linear-gradient(90deg, #f59e0b, #facc15);
+    }
+
+    .stat-fill.charisme {
+      background: linear-gradient(90deg, #7c3aed, #c084fc);
+    }
+
+    /* BOOSTER */
+    .booster-overlay {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 4000;
+      background:
+        radial-gradient(circle, rgba(255,255,255,0.08), transparent 40%),
+        rgba(0,0,0,0.88);
+      backdrop-filter: blur(8px);
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .booster-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .booster-stage {
+      position: relative;
+      width: min(92vw, 420px);
+      height: 620px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      perspective: 1400px;
+    }
+
+    .booster-pack {
+      position: absolute;
+      width: 320px;
+      height: 500px;
+      border-radius: 24px;
+      background:
+        linear-gradient(160deg, rgba(255,255,255,0.18), rgba(255,255,255,0.03)),
+        linear-gradient(180deg, #1f2937, #0f172a 55%, #111 100%);
+      border: 2px solid rgba(255,255,255,0.14);
+      box-shadow: 0 25px 55px rgba(0,0,0,0.45);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .booster-pack::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(135deg,
+          rgba(255,0,128,0.18),
+          rgba(0,191,255,0.16),
+          rgba(255,217,0,0.16),
+          rgba(0,255,153,0.14));
+      mix-blend-mode: screen;
+      opacity: 0.7;
+    }
+
+    .booster-pack::after {
+      content: "LOS SANTOS BOOSTER";
+      position: absolute;
+      left: 50%;
+      top: 40px;
+      transform: translateX(-50%);
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      text-align: center;
+      width: 80%;
+      text-shadow: 0 3px 15px rgba(0,0,0,0.35);
+    }
+
+    .pack-glow {
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.22), transparent 70%);
+      filter: blur(18px);
+      animation: pulseGlow 1.8s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%,100% { transform: scale(0.92); opacity: 0.6; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    .booster-pack.shake {
+      animation: packShake 0.75s ease-in-out 2;
+    }
+
+    @keyframes packShake {
+      0% { transform: rotate(-3deg) translateY(0); }
+      20% { transform: rotate(3deg) translateY(-4px); }
+      40% { transform: rotate(-2deg) translateY(0); }
+      60% { transform: rotate(2deg) translateY(-6px); }
+      80% { transform: rotate(-1deg) translateY(0); }
+      100% { transform: rotate(0deg) translateY(0); }
+    }
+
+    .booster-pack.opening {
+      animation: packOpen 1.3s forwards ease;
+    }
+
+    @keyframes packOpen {
+      0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+      35% {
+        transform: scale(1.06) rotate(4deg);
+        opacity: 1;
+      }
+      70% {
+        transform: scale(1.15) rotate(-4deg);
+        opacity: 0.9;
+      }
+      100% {
+        transform: scale(1.8) rotate(0deg);
+        opacity: 0;
+      }
+    }
+
+    .revealed-card {
+      position: absolute;
+      width: 320px;
+      border-radius: 22px;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+        linear-gradient(180deg, #151515, #0a0a0a);
+      border: 2px solid rgba(255,255,255,0.12);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.55);
+      transform: scale(0.6);
+      opacity: 0;
+    }
+
+    .revealed-card.show {
+      animation: revealCard 0.9s forwards ease;
+    }
+
+    @keyframes revealCard {
+      0% {
+        transform: scale(0.55) rotateY(90deg);
+        opacity: 0;
+      }
+      60% {
+        transform: scale(1.04) rotateY(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1) rotateY(0deg);
+        opacity: 1;
+      }
+    }
+
+    .revealed-card img {
+      width: 100%;
+      height: 390px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .revealed-card-content {
+      padding: 16px;
+    }
+
+    .booster-actions {
+      position: absolute;
+      bottom: -70px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .small-btn {
+      cursor: pointer;
+      min-width: auto;
+      padding: 12px 16px;
+      font-weight: bold;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 900px) {
       .modal-box {
         grid-template-columns: 1fr;
       }
 
       .modal-image-wrap {
-        min-height: 320px;
-        max-height: 420px;
+        min-height: 330px;
+        max-height: 430px;
       }
 
       .modal-title {
-        font-size: 28px;
-      }
-
-      .modal-stats {
-        grid-template-columns: 1fr 1fr;
+        font-size: 30px;
       }
     }
 
     @media (max-width: 520px) {
-      h1 {
-        font-size: 30px;
+      h1 { font-size: 32px; }
+
+      .card img { height: 280px; }
+
+      .modal-info { padding: 20px; }
+
+      .modal-title { font-size: 25px; }
+
+      .booster-stage {
+        height: 560px;
       }
 
-      .card img {
-        height: 280px;
+      .booster-pack,
+      .revealed-card {
+        width: 280px;
       }
 
-      .modal-info {
-        padding: 20px;
+      .booster-pack {
+        height: 450px;
       }
 
-      .modal-stats {
-        grid-template-columns: 1fr;
+      .revealed-card img {
+        height: 340px;
       }
 
-      .modal-title {
-        font-size: 24px;
+      .booster-actions {
+        bottom: -90px;
       }
     }
   </style>
@@ -382,11 +710,12 @@
       <option value="epique">Épique</option>
       <option value="legendaire">Légendaire</option>
     </select>
+    <button class="booster-btn" id="openBoosterBtn">🎁 Ouvrir un booster</button>
   </div>
 
   <div class="grid" id="cardGrid"></div>
 
-  <!-- MODAL -->
+  <!-- MODAL CARTE -->
   <div class="modal" id="cardModal">
     <div class="modal-box" id="modalBox">
       <div class="modal-image-wrap">
@@ -396,7 +725,7 @@
         <button class="close-btn" id="closeModalBtn">×</button>
         <div class="modal-rarity" id="modalRarity"></div>
         <h2 class="modal-title" id="modalName"></h2>
-        <div class="modal-subinfo">Carte personnage • Booster Pack RP</div>
+        <div class="modal-subinfo">Carte personnage • Collection RP</div>
 
         <div class="modal-special">
           <strong>Capacité spéciale :</strong>
@@ -406,23 +735,69 @@
         <div class="modal-price" id="modalPrice"></div>
 
         <div class="modal-stats">
-          <div class="stat-box">
-            <div class="stat-label">Intelligence</div>
-            <div class="stat-value" id="modalIntelligence"></div>
+          <div class="stat-row">
+            <div class="stat-head">
+              <span class="stat-label">Intelligence</span>
+              <span id="modalIntelligenceValue"></span>
+            </div>
+            <div class="stat-bar">
+              <div class="stat-fill intelligence" id="modalIntelligenceBar"></div>
+            </div>
           </div>
-          <div class="stat-box">
-            <div class="stat-label">Force</div>
-            <div class="stat-value" id="modalForce"></div>
+
+          <div class="stat-row">
+            <div class="stat-head">
+              <span class="stat-label">Force</span>
+              <span id="modalForceValue"></span>
+            </div>
+            <div class="stat-bar">
+              <div class="stat-fill force" id="modalForceBar"></div>
+            </div>
           </div>
-          <div class="stat-box">
-            <div class="stat-label">Danger</div>
-            <div class="stat-value" id="modalDanger"></div>
+
+          <div class="stat-row">
+            <div class="stat-head">
+              <span class="stat-label">Danger</span>
+              <span id="modalDangerValue"></span>
+            </div>
+            <div class="stat-bar">
+              <div class="stat-fill danger" id="modalDangerBar"></div>
+            </div>
           </div>
-          <div class="stat-box">
-            <div class="stat-label">Charisme</div>
-            <div class="stat-value" id="modalCharisme"></div>
+
+          <div class="stat-row">
+            <div class="stat-head">
+              <span class="stat-label">Charisme</span>
+              <span id="modalCharismeValue"></span>
+            </div>
+            <div class="stat-bar">
+              <div class="stat-fill charisme" id="modalCharismeBar"></div>
+            </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOSTER -->
+  <div class="booster-overlay" id="boosterOverlay">
+    <div class="booster-stage">
+      <div class="pack-glow" id="packGlow"></div>
+      <div class="booster-pack" id="boosterPack"></div>
+
+      <div class="revealed-card hidden" id="revealedCard">
+        <img id="revealedImage" src="" alt="">
+        <div class="revealed-card-content">
+          <div class="tag" id="revealedRarity"></div>
+          <h3 id="revealedName" style="margin: 0 0 8px; font-size: 24px;"></h3>
+          <div id="revealedSpecial" class="special"></div>
+          <div id="revealedPrice" class="price"></div>
+        </div>
+      </div>
+
+      <div class="booster-actions">
+        <button class="small-btn hidden" id="showDetailsBtn">Voir la carte</button>
+        <button class="small-btn" id="closeBoosterBtn">Fermer</button>
       </div>
     </div>
   </div>
@@ -441,7 +816,6 @@
         charisme: 76,
         special: "Malistrip"
       },
-
       {
         name: "Alvaro Cardinas",
         image: "images/Capture d'écran 2026-03-14 170717.png",
@@ -454,7 +828,6 @@
         charisme: 65,
         special: "Bagarreur loyal"
       },
-
       {
         name: "Aurmelya Haldorsen",
         image: "images/Capture d'écran 2026-03-14 171602.png",
@@ -467,7 +840,6 @@
         charisme: 88,
         special: "Addiction aux défis"
       },
-
       {
         name: "Chavo",
         image: "images/Capture d'écran 2026-03-17 124041 - Copie.png",
@@ -480,7 +852,6 @@
         charisme: 71,
         special: "Chimiste hors pair"
       },
-
       {
         name: "Cole McGarrett",
         image: "images/Capture d'écran 2026-03-17 124051 - Copie.png",
@@ -493,7 +864,6 @@
         charisme: 70,
         special: "Traqueur Most Wanted"
       },
-
       {
         name: "DK",
         image: "images/Capture d'écran 2026-03-17 124104 - Copie.png",
@@ -506,7 +876,6 @@
         charisme: 81,
         special: "Flash du Hood"
       },
-
       {
         name: "Elliot Wilson",
         image: "images/Capture d'écran 2026-03-17 124110 - Copie.png",
@@ -519,7 +888,6 @@
         charisme: 68,
         special: "Matricule 48"
       },
-
       {
         name: "Ethan Shaws",
         image: "images/Capture d'écran 2026-03-17 124129.png",
@@ -532,7 +900,6 @@
         charisme: 83,
         special: "Calme stratégique"
       },
-
       {
         name: "Dim Kleein",
         image: "images/Capture d'écran 2026-03-17 124056 - Copie.png",
@@ -545,7 +912,6 @@
         charisme: 79,
         special: "Relation Benny's"
       },
-
       {
         name: "Kahel Brooks",
         image: "images/Capture d'écran 2026-03-17 124354.png",
@@ -558,7 +924,6 @@
         charisme: 72,
         special: "Mauvais bagarreur"
       },
-
       {
         name: "Logan Hayes",
         image: "images/Capture d'écran 2026-03-17 124406.png",
@@ -571,7 +936,6 @@
         charisme: 71,
         special: "Justice froide"
       },
-
       {
         name: "Markus 'Shorty' Kelly",
         image: "images/Capture d'écran 2026-03-17 124412.png",
@@ -584,7 +948,6 @@
         charisme: 69,
         special: "Tentative fatale"
       },
-
       {
         name: "Mascotte",
         image: "images/Capture d'écran 2026-03-17 124420.png",
@@ -597,7 +960,6 @@
         charisme: 90,
         special: "La vachette"
       },
-
       {
         name: "Flako Sinetavarez",
         image: "images/Capture d'écran 2026-03-17 124144.png",
@@ -610,7 +972,6 @@
         charisme: 76,
         special: "Vice-président dangereux"
       },
-
       {
         name: "Ghost 'Pookie'",
         image: "images/Capture d'écran 2026-03-17 124149.png",
@@ -623,7 +984,6 @@
         charisme: 90,
         special: "Manipulation de rue"
       },
-
       {
         name: "Hector Castillo",
         image: "images/Capture d'écran 2026-03-17 124201.png",
@@ -636,7 +996,6 @@
         charisme: 70,
         special: "Fou du bus"
       },
-
       {
         name: "Hector Trevino",
         image: "images/Capture d'écran 2026-03-17 124207 - Copie.png",
@@ -649,7 +1008,6 @@
         charisme: 88,
         special: "Rap sans limite"
       },
-
       {
         name: "Hezekiel Huotari",
         image: "images/Capture d'écran 2026-03-17 124215.png",
@@ -662,7 +1020,6 @@
         charisme: 67,
         special: "Tue sur ordre"
       },
-
       {
         name: "Harvey Freeman",
         image: "images/Capture d'écran 2026-03-17 124222.png",
@@ -675,7 +1032,6 @@
         charisme: 90,
         special: "Patron respecté"
       },
-
       {
         name: "Kayla",
         image: "images/Capture d'écran 2026-03-17 124342.png",
@@ -688,7 +1044,6 @@
         charisme: 92,
         special: "Folie attachante"
       },
-
       {
         name: "Keith Ross",
         image: "images/Capture d'écran 2026-03-17 124349.png",
@@ -701,7 +1056,6 @@
         charisme: 87,
         special: "Overtown clique"
       },
-
       {
         name: "Lewis",
         image: "images/Capture d'écran 2026-03-17 124401.png",
@@ -714,7 +1068,6 @@
         charisme: 67,
         special: "Bagarreur sanglant"
       },
-
       {
         name: "Jimmy Crawford",
         image: "images/Capture d'écran 2026-03-17 124241.png",
@@ -727,7 +1080,6 @@
         charisme: 88,
         special: "Influenceur du vice"
       },
-
       {
         name: "Jamall",
         image: "images/Capture d'écran 2026-03-17 124247.png",
@@ -740,7 +1092,6 @@
         charisme: 76,
         special: "La foudre SMM"
       },
-
       {
         name: "Joseph Chpéko",
         image: "images/Capture d'écran 2026-03-17 124252.png",
@@ -753,7 +1104,6 @@
         charisme: 73,
         special: "Autorité des Devils"
       },
-
       {
         name: "Jackson Brown",
         image: "images/Capture d'écran 2026-03-17 124305.png",
@@ -766,7 +1116,6 @@
         charisme: 68,
         special: "Cavale infernale"
       },
-
       {
         name: "Kenneth St-John",
         image: "images/Capture d'écran 2026-03-17 124316.png",
@@ -779,7 +1128,6 @@
         charisme: 71,
         special: "Vice-duc des gueux"
       },
-
       {
         name: "Kayz Kush",
         image: "images/Capture d'écran 2026-03-17 124320.png",
@@ -792,7 +1140,6 @@
         charisme: 69,
         special: "Balboa dans les veines"
       },
-
       {
         name: "Isaac Griffin",
         image: "images/Capture d'écran 2026-03-17 124230.png",
@@ -805,7 +1152,6 @@
         charisme: 84,
         special: "Hangover Repair"
       },
-
       {
         name: "James Barrows",
         image: "images/Capture d'écran 2026-03-17 124235.png",
@@ -818,7 +1164,6 @@
         charisme: 76,
         special: "Directeur de Bolingbroke"
       },
-
       {
         name: "Rust",
         image: "images/Capture d'écran 2026-03-14 190926.png",
@@ -831,7 +1176,6 @@
         charisme: 69,
         special: "Maître des chiffres"
       },
-
       {
         name: "Riley Barrows",
         image: "images/Capture d'écran 2026-03-14 190934.png",
@@ -844,7 +1188,6 @@
         charisme: 84,
         special: "Gros caractère"
       },
-
       {
         name: "Raven Carter",
         image: "images/Capture d'écran 2026-03-14 190941.png",
@@ -857,7 +1200,6 @@
         charisme: 83,
         special: "Femme d'affaire froide"
       },
-
       {
         name: "Marco Santini",
         image: "images/Capture d'écran 2026-03-17 124427.png",
@@ -870,7 +1212,6 @@
         charisme: 71,
         special: "Ancien Devil 1%"
       },
-
       {
         name: "Marcus West",
         image: "images/Capture d'écran 2026-03-14 180855.png",
@@ -883,7 +1224,6 @@
         charisme: 70,
         special: "Mary SAST"
       },
-
       {
         name: "Neli",
         image: "images/Capture d'écran 2026-03-14 180902.png",
@@ -896,7 +1236,6 @@
         charisme: 92,
         special: "Double face"
       },
-
       {
         name: "Noeliax",
         image: "images/Capture d'écran 2026-03-14 180907.png",
@@ -909,7 +1248,6 @@
         charisme: 78,
         special: "Rookie 102"
       },
-
       {
         name: "Kody Hall",
         image: "images/Capture d'écran 2026-03-17 124332.png",
@@ -922,7 +1260,6 @@
         charisme: 89,
         special: "Organisateur d'événements"
       },
-
       {
         name: "Sweeney",
         image: "images/Capture d'écran 2026-03-14 192423.png",
@@ -935,7 +1272,6 @@
         charisme: 91,
         special: "Miss Los Santos"
       },
-
       {
         name: "Sime et Coca",
         image: "images/Capture d'écran 2026-03-14 193110.png",
@@ -948,7 +1284,6 @@
         charisme: 78,
         special: "Rois du territoire"
       },
-
       {
         name: "Smoke",
         image: "images/Capture d'écran 2026-03-14 193129.png",
@@ -961,7 +1296,6 @@
         charisme: 67,
         special: "Gang SMM"
       },
-
       {
         name: "Sombra",
         image: "images/Capture d'écran 2026-03-14 193158.png",
@@ -974,7 +1308,6 @@
         charisme: 86,
         special: "Chanteuse des ombres"
       },
-
       {
         name: "Switcher",
         image: "images/Capture d'écran 2026-03-14 193536.png",
@@ -987,7 +1320,6 @@
         charisme: 84,
         special: "Rappeur disque d'or"
       },
-
       {
         name: "Rey Brooks",
         image: "images/Capture d'écran 2026-03-14 192313.png",
@@ -1000,7 +1332,6 @@
         charisme: 88,
         special: "Protectrice"
       },
-
       {
         name: "Rubio",
         image: "images/Capture d'écran 2026-03-14 192320.png",
@@ -1013,7 +1344,6 @@
         charisme: 73,
         special: "Most Wanted"
       },
-
       {
         name: "Silvio Castellianos",
         image: "images/Capture d'écran 2026-03-14 192327.png",
@@ -1026,7 +1356,6 @@
         charisme: 80,
         special: "Fou tropical"
       },
-
       {
         name: "Umbra",
         image: "images/Capture d'écran 2026-03-14 194636.png",
@@ -1039,7 +1368,6 @@
         charisme: 86,
         special: "Black Wolf Family"
       },
-
       {
         name: "Warren Hope",
         image: "images/Capture d'écran 2026-03-14 194652.png",
@@ -1052,7 +1380,6 @@
         charisme: 84,
         special: "Sang-froid SAST"
       },
-
       {
         name: "Yang Wu",
         image: "images/Capture d'écran 2026-03-14 194700.png",
@@ -1065,7 +1392,6 @@
         charisme: 78,
         special: "Fureur du dragon"
       },
-
       {
         name: "Zikzee Tabar",
         image: "images/Capture d'écran 2026-03-14 195134.png",
@@ -1078,7 +1404,6 @@
         charisme: 79,
         special: "Folie de hooligan"
       },
-
       {
         name: "Sergo Exandus",
         image: "images/Capture d'écran 2026-03-14 193544.png",
@@ -1091,7 +1416,6 @@
         charisme: 74,
         special: "Exécution froide"
       },
-
       {
         name: "Tao Vato",
         image: "images/Capture d'écran 2026-03-14 193550.png",
@@ -1104,7 +1428,6 @@
         charisme: 90,
         special: "Leadership MC"
       },
-
       {
         name: "TekeuR Hall",
         image: "images/Capture d'écran 2026-03-14 194626.png",
@@ -1117,7 +1440,6 @@
         charisme: 76,
         special: "Manipulation furtive"
       },
-
       {
         name: "Wesley Jones",
         image: "images/Capture d'écran 2026-03-14 194645.png",
@@ -1130,7 +1452,6 @@
         charisme: 72,
         special: "Rage du 46"
       },
-
       {
         name: "Yoro Shin",
         image: "images/Capture d'écran 2026-03-14 195108.png",
@@ -1143,7 +1464,6 @@
         charisme: 90,
         special: "Empereur de l'Ombre"
       },
-
       {
         name: "Zayra Cifuentes",
         image: "images/Capture d'écran 2026-03-14 195122.png",
@@ -1156,7 +1476,6 @@
         charisme: 92,
         special: "Négociation Venimeuse"
       },
-
       {
         name: "Aitoarii Teikitohe",
         image: "images/Capture d'écran 2026-03-17 124030.png",
@@ -1169,7 +1488,6 @@
         charisme: 84,
         special: "King of Knuckle Duster"
       },
-
       {
         name: "Albert Bentata",
         image: "images/Capture d'écran 2026-03-14 170353.png",
@@ -1182,7 +1500,6 @@
         charisme: 88,
         special: "Démêrdard Juridique"
       },
-
       {
         name: "Alejandro Peña 'Ruta'",
         image: "images/Capture d'écran 2026-03-14 170516 - Copie.png",
@@ -1195,7 +1512,6 @@
         charisme: 88,
         special: "Homme de la Route"
       },
-
       {
         name: "Elarrya Campos",
         image: "images/Capture d'écran 2026-03-17 124117 - Copie.png",
@@ -1208,7 +1524,6 @@
         charisme: 91,
         special: "Miracle Médical"
       },
-
       {
         name: "Elio 'Mani' Clark",
         image: "images/Capture d'écran 2026-03-17 124123.png",
@@ -1221,7 +1536,6 @@
         charisme: 78,
         special: "Hacker de Haut Niveau"
       },
-
       {
         name: "Tonton Kalile",
         image: "images/Capture d'écran 2026-03-17 124326.png",
@@ -1234,7 +1548,6 @@
         charisme: 86,
         special: "Discipline Militaire"
       },
-
       {
         name: "Penfield Cody",
         image: "images/Capture d'écran 2026-03-14 190635.png",
@@ -1247,7 +1560,6 @@
         charisme: 86,
         special: "Cerveau de Braquage"
       },
-
       {
         name: "Pierce Logan",
         image: "images/Capture d'écran 2026-03-14 190700.png",
@@ -1260,7 +1572,6 @@
         charisme: 95,
         special: "Vibes Positives"
       },
-
       {
         name: "Renato Nascimento",
         image: "images/Capture d'écran 2026-03-14 192250.png",
@@ -1273,7 +1584,6 @@
         charisme: 92,
         special: "Plaidoirie Foudroyante"
       },
-
       {
         name: "T-Rock",
         image: "images/Capture d'écran 2026-03-14 194344.png",
@@ -1286,7 +1596,6 @@
         charisme: 84,
         special: "Maître Tatoueur"
       },
-
       {
         name: "Sha'Quille Hill",
         image: "images/Capture d'écran 2026-03-14 193148.png",
@@ -1299,6 +1608,20 @@
         charisme: 87,
         special: "Respect de la Rue"
       },
+
+      /* exemples légendaires si tu veux tester le holo gold direct */
+      {
+        name: "Don Vercetti",
+        image: "images/Capture d'écran 2026-03-14 195108.png",
+        rarity: "legendaire",
+        displayRarity: "Légendaire",
+        price: "7000$",
+        intelligence: 98,
+        force: 88,
+        danger: 99,
+        charisme: 96,
+        special: "Roi absolu de Los Santos"
+      }
     ];
 
     const grid = document.getElementById("cardGrid");
@@ -1306,34 +1629,75 @@
     const filter = document.getElementById("filter");
 
     const modal = document.getElementById("cardModal");
+    const modalBox = document.getElementById("modalBox");
     const closeModalBtn = document.getElementById("closeModalBtn");
     const modalImage = document.getElementById("modalImage");
     const modalName = document.getElementById("modalName");
     const modalRarity = document.getElementById("modalRarity");
     const modalSpecialText = document.getElementById("modalSpecialText");
     const modalPrice = document.getElementById("modalPrice");
-    const modalIntelligence = document.getElementById("modalIntelligence");
-    const modalForce = document.getElementById("modalForce");
-    const modalDanger = document.getElementById("modalDanger");
-    const modalCharisme = document.getElementById("modalCharisme");
+
+    const modalIntelligenceValue = document.getElementById("modalIntelligenceValue");
+    const modalForceValue = document.getElementById("modalForceValue");
+    const modalDangerValue = document.getElementById("modalDangerValue");
+    const modalCharismeValue = document.getElementById("modalCharismeValue");
+
+    const modalIntelligenceBar = document.getElementById("modalIntelligenceBar");
+    const modalForceBar = document.getElementById("modalForceBar");
+    const modalDangerBar = document.getElementById("modalDangerBar");
+    const modalCharismeBar = document.getElementById("modalCharismeBar");
+
+    const openBoosterBtn = document.getElementById("openBoosterBtn");
+    const boosterOverlay = document.getElementById("boosterOverlay");
+    const boosterPack = document.getElementById("boosterPack");
+    const closeBoosterBtn = document.getElementById("closeBoosterBtn");
+    const revealedCard = document.getElementById("revealedCard");
+    const revealedImage = document.getElementById("revealedImage");
+    const revealedRarity = document.getElementById("revealedRarity");
+    const revealedName = document.getElementById("revealedName");
+    const revealedSpecial = document.getElementById("revealedSpecial");
+    const revealedPrice = document.getElementById("revealedPrice");
+    const showDetailsBtn = document.getElementById("showDetailsBtn");
+
+    let boosterDrawnCard = null;
+
+    function getCardClasses(card) {
+      const holo = card.rarity === "epique" || card.rarity === "legendaire" ? "holo" : "";
+      return `card ${card.rarity} ${holo}`.trim();
+    }
+
+    function setBar(barEl, value) {
+      barEl.style.width = "0%";
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          barEl.style.width = `${Math.max(0, Math.min(100, value))}%`;
+        }, 80);
+      });
+    }
 
     function openModal(card) {
       modalImage.src = card.image;
       modalImage.alt = card.name;
       modalName.textContent = card.name;
-
       modalRarity.textContent = card.displayRarity;
       modalRarity.className = `modal-rarity ${card.rarity}`;
-
       modalSpecialText.textContent = card.special;
       modalPrice.textContent = `💰 Valeur : ${card.price}`;
-      modalIntelligence.textContent = card.intelligence;
-      modalForce.textContent = card.force;
-      modalDanger.textContent = card.danger;
-      modalCharisme.textContent = card.charisme;
+
+      modalIntelligenceValue.textContent = card.intelligence;
+      modalForceValue.textContent = card.force;
+      modalDangerValue.textContent = card.danger;
+      modalCharismeValue.textContent = card.charisme;
+
+      modalBox.classList.toggle("holo", card.rarity === "epique" || card.rarity === "legendaire");
 
       modal.classList.add("active");
       document.body.style.overflow = "hidden";
+
+      setBar(modalIntelligenceBar, card.intelligence);
+      setBar(modalForceBar, card.force);
+      setBar(modalDangerBar, card.danger);
+      setBar(modalCharismeBar, card.charisme);
     }
 
     function closeModal() {
@@ -1353,14 +1717,15 @@
 
       grid.innerHTML = "";
 
-      if (filteredCards.length === 0) {
+      if (!filteredCards.length) {
         grid.innerHTML = `<div class="empty-state">Aucune carte trouvée.</div>`;
         return;
       }
 
       filteredCards.forEach(card => {
         const div = document.createElement("div");
-        div.className = `card ${card.rarity}`;
+        div.className = getCardClasses(card);
+
         div.innerHTML = `
           <img src="${card.image}" alt="${card.name}">
           <div class="card-content">
@@ -1374,6 +1739,7 @@
             </div>
             <div class="special">⭐ ${card.special}</div>
             <div class="price">💰 ${card.price}</div>
+            <div class="click-hint">Cliquer pour voir</div>
           </div>
         `;
 
@@ -1382,21 +1748,102 @@
       });
     }
 
+    function drawRandomCard() {
+      const roll = Math.random() * 100;
+
+      let rarityPool = "rare";
+      if (roll < 8) rarityPool = "legendaire";
+      else if (roll < 38) rarityPool = "epique";
+
+      let pool = cards.filter(card => card.rarity === rarityPool);
+
+      if (!pool.length) {
+        pool = cards.filter(card => card.rarity === "epique");
+      }
+      if (!pool.length) {
+        pool = cards.filter(card => card.rarity === "rare");
+      }
+
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function resetBooster() {
+      boosterDrawnCard = null;
+      boosterPack.classList.remove("opening", "shake", "hidden");
+      revealedCard.classList.add("hidden");
+      revealedCard.classList.remove("show", "holo");
+      showDetailsBtn.classList.add("hidden");
+    }
+
+    function openBooster() {
+      resetBooster();
+      boosterOverlay.classList.add("active");
+      document.body.style.overflow = "hidden";
+
+      setTimeout(() => {
+        boosterPack.classList.add("shake");
+      }, 120);
+
+      setTimeout(() => {
+        boosterDrawnCard = drawRandomCard();
+        boosterPack.classList.remove("shake");
+        boosterPack.classList.add("opening");
+      }, 1600);
+
+      setTimeout(() => {
+        boosterPack.classList.add("hidden");
+
+        revealedImage.src = boosterDrawnCard.image;
+        revealedImage.alt = boosterDrawnCard.name;
+        revealedRarity.textContent = boosterDrawnCard.displayRarity;
+        revealedRarity.className = `tag ${boosterDrawnCard.rarity}`;
+        revealedName.textContent = boosterDrawnCard.name;
+        revealedSpecial.textContent = `⭐ ${boosterDrawnCard.special}`;
+        revealedPrice.textContent = `💰 ${boosterDrawnCard.price}`;
+
+        revealedCard.classList.remove("hidden");
+        revealedCard.classList.toggle("holo", boosterDrawnCard.rarity === "epique" || boosterDrawnCard.rarity === "legendaire");
+        revealedCard.classList.add("show");
+
+        showDetailsBtn.classList.remove("hidden");
+      }, 2700);
+    }
+
+    function closeBooster() {
+      boosterOverlay.classList.remove("active");
+      document.body.style.overflow = "";
+      setTimeout(resetBooster, 180);
+    }
+
     search.addEventListener("input", renderCards);
     filter.addEventListener("change", renderCards);
 
     closeModalBtn.addEventListener("click", closeModal);
 
     modal.addEventListener("click", (e) => {
-      if (e.target === modal) {
-        closeModal();
-      }
+      if (e.target === modal) closeModal();
     });
 
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && modal.classList.contains("active")) {
         closeModal();
       }
+      if (e.key === "Escape" && boosterOverlay.classList.contains("active")) {
+        closeBooster();
+      }
+    });
+
+    openBoosterBtn.addEventListener("click", openBooster);
+    closeBoosterBtn.addEventListener("click", closeBooster);
+
+    boosterOverlay.addEventListener("click", (e) => {
+      if (e.target === boosterOverlay) closeBooster();
+    });
+
+    showDetailsBtn.addEventListener("click", () => {
+      if (!boosterDrawnCard) return;
+      closeBooster();
+      setTimeout(() => openModal(boosterDrawnCard), 220);
     });
 
     renderCards();
